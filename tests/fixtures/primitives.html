@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Don Le — primitive verification</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header page-container">
+    <a class="site-identity" href="/">Don Le</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="link-cluster">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="/cv/">Profile</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="page-container section-stack" id="main" tabindex="-1">
+    <section class="intro" aria-labelledby="intro-title">
+      <div class="intro-text stack">
+        <h1 id="intro-title">Don Le</h1>
+        <p>Staff Engineer · Data Platforms &amp; Applied AI</p>
+        <p class="current-role">Staff Engineer / Tech Lead &#8212; Data Platform at mod.io</p>
+        <p>Data-platform work, alongside applied-AI prototypes exploring retrieval, conversation state and recommendation ranking.</p>
+        <div class="link-cluster">
+          <a href="#work">Selected projects</a>
+          <a href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <img class="portrait" src="/covers/herophoto.png" width="246" height="263" alt="Portrait of Don Le">
+    </section>
+    <section class="stack" id="work" aria-labelledby="work-title">
+      <h2 id="work-title">Selected AI projects</h2>
+      <ol class="project-list">
+        <li class="project-row">
+          <span class="project-number" aria-hidden="true">01</span>
+          <div class="project-content stack">
+            <h3 id="rag-title">Local-first RAG for coding agents</h3>
+            <p>A local-first retrieval plugin for coding agents, using local embeddings and a vector index to search project files and documentation.</p>
+            <p class="status">Developer-tooling prototype</p>
+          </div>
+          <a class="project-link" href="/projects/local-rag/" aria-labelledby="rag-read rag-title"><span id="rag-read">Read project</span></a>
+        </li>
+        <li class="project-row">
+          <span class="project-number" aria-hidden="true">02</span>
+          <div class="project-content stack">
+            <h3 id="assistant-title">Personal AI assistant</h3>
+            <p>A local assistant prototype exploring streamed model responses, bounded context, persistent execution state and cost controls.</p>
+            <p class="status">Local prototype · In development</p>
+            <p>Not production-ready; cloud deployment and live billing remain unverified.</p>
+          </div>
+          <a class="project-link" href="/projects/personal-assistant/" aria-labelledby="assistant-read assistant-title"><span id="assistant-read">Read project</span></a>
+        </li>
+        <li class="project-row">
+          <span class="project-number" aria-hidden="true">03</span>
+          <div class="project-content stack">
+            <h3 id="recommender-title">Two-stage recommendation engine</h3>
+            <p>A two-stage recommendation prototype combining semantic candidate retrieval with learning-to-rank over MovieLens data.</p>
+            <p class="status">ML prototype</p>
+          </div>
+          <a class="project-link" href="/projects/recommender/" aria-labelledby="recommender-read recommender-title"><span id="recommender-read">Read project</span></a>
+        </li>
+      </ol>
+    </section>
+    <section class="prose" id="experience" aria-labelledby="experience-title">
+      <h2 id="experience-title">Professional experience</h2>
+      <p>Staff Engineer / Tech Lead &#8212; Data Platform at mod.io</p>
+      <p>Current focus: data platforms.</p>
+      <h3>Agent workforce tooling</h3>
+      <p class="status">Agent tooling</p>
+      <p>CLI and MCP tooling for managing specialist-agent definitions and dispatching work through an external agent runtime.</p>
+      <p>The tooling manages definitions and dispatch; the external runtime carries out the agent work.</p>
+    </section>
+    <section class="prose" aria-labelledby="approach-title">
+      <h2 id="approach-title">Implemented approach</h2>
+      <p>The prototype exposes separate indexing and search tools, so adding source material and asking a question are distinct operations.</p>
+      <figure class="text-flow" aria-labelledby="flow-caption">
+        <figcaption id="flow-caption">Implementation overview</figcaption>
+        <ol>
+          <li>Sources</li><li>Chunks</li><li>Embeddings</li><li>Vector index</li><li>Retrieved context</li>
+        </ol>
+      </figure>
+      <h3>Limits and current status</h3>
+      <p>This is a developer-tooling prototype, not a claim of a released or audited retrieval service.</p>
+      <p>Read the <a href="/cv/">Profile</a> for current role and selected projects.</p>
+      <p class="print-instruction">Use your browser's Print command to print this profile or save it as a PDF.</p>
+    </section>
+  </main>
+  <footer class="site-footer page-container stack" id="contact">
+    <h2>About and contact</h2>
+    <p>This portfolio separates current data-platform work from prototype explorations in applied AI.</p>
+    <div class="link-cluster">
+      <a href="mailto:don.le@donske.com.au">Email: don.le@donske.com.au</a>
+      <a href="https://github.com/donske07">GitHub</a>
+      <a href="/cv/">Profile</a>
+    </div>
+  </footer>
+</body>
+</html>
