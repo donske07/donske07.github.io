@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Don Le — Staff Engineer · Data Platforms &amp; Applied AI</title>
+  <desc id="description">Editorial name card with charcoal text on warm paper. No project screenshots or performance claims.</desc>
+  <style>:root { --color-paper: #F7F6F3; --color-text: #202622; --color-secondary: #525A55; --color-rule: #D8DDD8; --font-heading: Georgia, 'Times New Roman', serif; --font-body: 'Helvetica Neue', Arial, sans-serif; --text-display: 64px; --text-h2: 32px; --text-h3: 24px; --rule-width: 1px; }</style>
+  <rect width="1200" height="630" fill="var(--color-paper)"/>
+  <g fill="var(--color-text)">
+    <text x="96" y="256" font-family="var(--font-heading)" font-size="var(--text-display)" font-weight="700">Don Le</text>
+    <text x="96" y="320" font-family="var(--font-body)" font-size="var(--text-h2)">Staff Engineer · Data Platforms &amp; Applied AI</text>
+  </g>
+  <path d="M96 384H1104" stroke="var(--color-rule)" stroke-width="var(--rule-width)"/>
+  <text x="96" y="448" fill="var(--color-secondary)" font-family="var(--font-body)" font-size="var(--text-h3)">www.donske.com.au</text>
+</svg>

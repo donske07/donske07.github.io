@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Don Le</title>
+  <style>:root { --color-paper: #F7F6F3; --color-text: #202622; --font-heading: Georgia, 'Times New Roman', serif; }</style>
+  <rect width="64" height="64" fill="var(--color-paper)"/>
+  <text x="32" y="44" text-anchor="middle" fill="var(--color-text)" font-family="var(--font-heading)" font-size="40">D</text>
+</svg>
