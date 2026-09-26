@@ -7,6 +7,7 @@ export default defineConfig({
   testMatch: '**/*.spec.mjs',
   testIgnore: '**/primitives.spec.mjs',
   forbidOnly: Boolean(process.env.CI),
+  workers: process.env.CI ? 1 : undefined,
   reporter: [['list'], ['json', { outputFile: process.env.EVIDENCE_DIR ? `${process.env.EVIDENCE_DIR}/playwright-results.json` : 'test-results/results.json' }], ['html', { outputFolder: process.env.EVIDENCE_DIR ? `${process.env.EVIDENCE_DIR}/playwright-report` : 'playwright-report', open: 'never' }]],
   outputDir: process.env.EVIDENCE_DIR ? `${process.env.EVIDENCE_DIR}/test-results` : 'test-results',
   use: { baseURL, trace: 'retain-on-failure' },
