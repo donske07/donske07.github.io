@@ -1,0 +1,20 @@
+@media print {
+  @page { size: auto; margin: var(--space-10); }
+  body { background: var(--color-surface); color: var(--color-text); }
+  .page-container { inline-size: 100%; max-inline-size: none; }
+  .site-nav, .skip-link { display: none; }
+  .site-header { padding: 0; margin-block-end: var(--space-4); }
+  .section-stack > * + *, .site-footer { margin-block-start: var(--space-4); }
+  .site-footer { padding-block: var(--space-4); }
+  .intro { display: block; }
+  .portrait { inline-size: var(--portrait-mobile); block-size: calc(var(--portrait-mobile) * 263 / 246); margin-block-start: var(--space-4); }
+  .project-row { display: block; padding-block: var(--space-4); }
+  .project-row > * + * { margin-block-start: var(--space-4); }
+  .prose, .project-content, .intro-text { max-inline-size: 100%; }
+  h1, h2, h3, h4, figcaption { break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  .text-flow, .project-row { break-inside: avoid; }
+  a, a:visited { color: var(--color-text); }
+  a[href^="https://"]::after, a[href^="mailto:"]::after { content: " (" attr(href) ")"; }
+  a[href^="/"]::after { content: " (https://www.donske.com.au" attr(href) ")"; }
+}

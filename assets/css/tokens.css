@@ -1,0 +1,63 @@
+:root {
+  color-scheme: light;
+  --color-paper: #F7F6F3;
+  --color-surface: #FFFFFF;
+  --color-text: #202622;
+  --color-secondary: #525A55;
+  --color-accent: #245442;
+  --color-rule: #D8DDD8;
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: 'Helvetica Neue', Arial, sans-serif;
+  --text-display: clamp(2.5rem, 1.5rem + 4vw, 4rem);
+  --text-h2: 2rem;
+  --text-h3: 1.5rem;
+  --text-h4: 1.25rem;
+  --text-body: 1rem;
+  --text-meta: 0.875rem;
+  --leading-display: 1.15;
+  --leading-heading: 1.3;
+  --leading-body: 1.6;
+  --weight-normal: 400;
+  --weight-strong: 700;
+  --tracking-normal: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --width-page: 1120px;
+  --width-prose: 68ch;
+  --width-intro-text-min: 20rem;
+  --portrait-mobile: 112px;
+  --portrait-desktop: 160px;
+  --target-min: 44px;
+  --breakpoint-wide: 48rem;
+  --duration-none: 0ms;
+  --focus-width: 3px;
+  --focus-offset: var(--space-1);
+  --link-rule: 1px;
+  --link-rule-emphasis: 2px;
+  --link-offset: var(--space-1);
+  --rule-width: 1px;
+  --radius-none: 0px;
+  --radius-small: 4px;
+  --radius-max: 8px;
+  --shadow-none: none;
+  --page-gutter: var(--space-5);
+  --section-gap: var(--space-16);
+  --portrait-width: var(--portrait-mobile);
+}
+
+/* Media conditions cannot consume custom properties: --breakpoint-wide. */
+@media (min-width: 48rem) {
+  :root {
+    --page-gutter: var(--space-10);
+    --section-gap: var(--space-24);
+    --portrait-width: var(--portrait-desktop);
+  }
+}
