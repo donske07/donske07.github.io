@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local-first RAG for coding agents | Don Le</title>
+  <meta name="description" content="A developer-tooling prototype using local embeddings, chunked sources and a vector index to retrieve project context for coding agents.">
+  <link rel="canonical" href="https://www.donske.com.au/projects/local-rag/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local-first RAG for coding agents | Don Le">
+  <meta property="og:description" content="A developer-tooling prototype using local embeddings, chunked sources and a vector index to retrieve project context for coding agents.">
+  <meta property="og:url" content="https://www.donske.com.au/projects/local-rag/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/print.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header page-container">
+    <a class="site-identity" href="/">Don Le</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="link-cluster">
+        <li><a href="/#work">Work</a></li>
+        <li><a href="/#experience">Experience</a></li>
+        <li><a href="/cv/">Profile</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="page-container section-stack" id="main" tabindex="-1">
+    <header class="intro">
+      <div class="intro-text stack">
+        <h1>Local-first RAG for coding agents</h1>
+        <p class="status">Developer-tooling prototype</p>
+        <p>A local-first retrieval plugin for coding agents, using local embeddings and a vector index to search project files and documentation.</p>
+      </div>
+    </header>
+    <section class="prose" aria-labelledby="problem-title">
+      <h2 id="problem-title">Problem</h2>
+      <p>The problem explored here is how to give a coding agent relevant project context without treating every file or document as part of every request.</p>
+      <p>A retrieval index offers a separate place to search that material, then return selected passages for the agent to inspect.</p>
+    </section>
+    <section class="prose" aria-labelledby="approach-title">
+      <h2 id="approach-title">Implemented approach</h2>
+      <p>Indexing requires an explicit confirmation argument before the tool calls the indexer; that check isn't an audit of the selected content.</p>
+      <p>Files, documentation and configured web sources can be selected independently, with chunk size and overlap passed into the collection process.</p>
+      <p>The documented chunking approach uses tokens and document structure, including headings and paragraphs, rather than treating each document as one indivisible search result.</p>
+      <p>Collected chunks are embedded with a local model and passed to a Postgres vector index alongside their source type and source reference.</p>
+      <p>Search uses cosine distance and accepts source-type filters, allowing a request to distinguish files, documentation and web material. Returned passages include source references, giving the reader a way to identify where the selected context came from.</p>
+      <figure class="text-flow" aria-labelledby="flow-caption">
+        <figcaption id="flow-caption">Implementation overview</figcaption>
+        <ol>
+          <li>Sources</li>
+          <li>Chunks</li>
+          <li>Embeddings</li>
+          <li>Vector index</li>
+          <li>Retrieved context</li>
+        </ol>
+      </figure>
+      <p>Selected sources → confirmation → chunk collection → local embeddings → vector index → filtered search → referenced passages.</p>
+    </section>
+    <section class="prose" aria-labelledby="tradeoffs-title">
+      <h2 id="tradeoffs-title">Trade-offs</h2>
+      <h3>Freshness and reindexing</h3>
+      <p>The prototype exposes separate indexing and search tools, so adding source material and asking a question are distinct operations.</p>
+      <p>Local embeddings keep that processing step local, but they also require a model and database to be available in the configured environment. They don't establish that the whole workflow is private, particularly when configured web sources or a separate coding-agent runtime are involved.</p>
+      <h3>Chunking and retrieval</h3>
+      <p>Chunking makes passages the unit of retrieval, while overlap carries some neighboring context at the cost of repeating material in the index. Those choices affect what a search can return; they aren't evidence that a particular chunk size produces better answers.</p>
+    </section>
+    <section class="prose" aria-labelledby="limits-title">
+      <h2 id="limits-title">Limits and current status</h2>
+      <p>This is a developer-tooling prototype, not a claim of a released or audited retrieval service.</p>
+      <p>The available evidence describes implementation and configuration, not measured retrieval quality, latency or production adoption.</p>
+      <p>Retrieved material still needs to be assessed as source content, not treated as instructions that override the agent's task.</p>
+    </section>
+  </main>
+  <footer class="site-footer page-container stack">
+    <h2>Contact</h2>
+    <div class="link-cluster">
+      <a href="mailto:don.le@donske.com.au">Email: don.le@donske.com.au</a>
+      <a href="https://github.com/donske07">GitHub</a>
+      <a href="/cv/">Profile</a>
+    </div>
+  </footer>
+</body>
+</html>
