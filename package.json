@@ -1,0 +1,23 @@
+{
+  "name": "donske07-portfolio",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/unit/*.test.mjs",
+    "check:site": "node scripts/check-site.mjs",
+    "preview": "node scripts/preview.mjs",
+    "test:e2e": "playwright test --config=playwright.config.mjs",
+    "audit": "node scripts/audit.mjs",
+    "verify": "npm run build && npm test && npm run check:site && npm run test:e2e && npm run audit"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "cheerio": "1.2.0",
+    "lighthouse": "13.5.0"
+  }
+}
