@@ -1,0 +1,17 @@
+{
+  "retired": [
+    "/articles", "/articles/", "/articles/index.html",
+    "/clean-codebase-is-like-a-clean-house", "/clean-codebase-is-like-a-clean-house/", "/clean-codebase-is-like-a-clean-house/index.html",
+    "/init-first-blog", "/init-first-blog/", "/init-first-blog/index.html",
+    "/tag", "/tag/", "/tag/index.html",
+    "/tag/Laravel", "/tag/Laravel/", "/tag/Laravel/index.html",
+    "/tag/Scratch", "/tag/Scratch/", "/tag/Scratch/index.html",
+    "/tag/Vue", "/tag/Vue/", "/tag/Vue/index.html",
+    "/usefullness-of-enum-types", "/usefullness-of-enum-types/", "/usefullness-of-enum-types/index.html",
+    "/articles/20200607%20%20Init%20first%20blog%20post", "/articles/20200607%20%20Init%20first%20blog%20post/", "/articles/20200607%20%20Init%20first%20blog%20post/index.html",
+    "/articles/20201406%20%20A%20clean%20codebase%20is%20like%20a%20clean%20house", "/articles/20201406%20%20A%20clean%20codebase%20is%20like%20a%20clean%20house/", "/articles/20201406%20%20A%20clean%20codebase%20is%20like%20a%20clean%20house/index.html",
+    "/articles/20200610%20%20Usefullness%20of%20Enum%20Type", "/articles/20200610%20%20Usefullness%20of%20Enum%20Type/", "/articles/20200610%20%20Usefullness%20of%20Enum%20Type/index.html",
+    "/pages/cv", "/pages/cv/", "/pages/cv/index.html"
+  ],
+  "preserve": ["/", "/cv/"]
+}
