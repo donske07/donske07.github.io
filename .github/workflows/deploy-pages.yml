@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      EVIDENCE_DIR: ${{ runner.temp }}/portfolio-evidence
+      EVIDENCE_DIR: /tmp/portfolio-evidence
     steps:
       - uses: actions/checkout@v5
         with:
