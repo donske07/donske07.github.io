@@ -1,0 +1,41 @@
+name: Portfolio checks
+
+'on':
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      EVIDENCE_DIR: ${{ runner.temp }}/portfolio-evidence
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install browser runtimes and system dependencies
+        run: npx playwright install --with-deps
+      - name: Install Chrome stable for audits
+        run: npx playwright install chrome
+      - name: Require Chrome stable
+        run: google-chrome --version
+      - name: Verify fresh artifact
+        run: npm run verify
+      - name: Save verified site for review, not deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-dist-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
