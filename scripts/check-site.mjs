@@ -8,7 +8,7 @@ const dist = path.resolve(process.env.DIST_DIR ?? path.join(root, 'dist'));
 const manifest = path.resolve(process.env.MANIFEST_FILE ?? path.join(root, 'scripts/publish-files.json'));
 const origin = 'https://www.donske.com.au';
 const routes = new Map([
-  ['index.html', ['/', 'Don Le | Staff Engineer · Data Platforms & Applied AI', 'Don Le, Staff Engineer at mod.io, on data-platform work and independent AI projects in local retrieval, assistant execution and recommendation ranking.']],
+  ['index.html', ['/', 'Don Le | Staff Engineer · Data Platforms & Applied AI', 'Don Le, Staff Engineer at mod.io, showcasing open-source agent tooling and independent work in local retrieval, assistant execution and recommendation ranking.']],
   ['projects/local-rag/index.html', ['/projects/local-rag/', 'Local-first RAG for coding agents | Don Le', 'A developer-tooling prototype using local embeddings, chunked sources and a vector index to retrieve project context for coding agents.']],
   ['projects/personal-assistant/index.html', ['/projects/personal-assistant/', 'Personal AI assistant | Don Le', 'An in-development assistant exploring reliable conversation execution through idempotent replay, persistent state, bounded context, stream validation and budget controls.']],
   ['projects/recommender/index.html', ['/projects/recommender/', 'Two-stage recommendation engine | Don Le', 'A two-stage MovieLens recommendation prototype: semantic candidate retrieval, feature-based reranking, score fusion, unknown-user fallback and evaluation design.']],

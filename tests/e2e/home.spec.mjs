@@ -35,13 +35,17 @@ async function identity(page) {
   await expect(page.locator('h1 + p')).toHaveText('Staff Engineer · Data Platforms & Applied AI');
   await expect(page.locator('.intro .current-role')).toHaveText(role);
   await expect(page.locator('#experience')).toContainText(role);
-  await expect(page.locator('.project-list > li')).toHaveCount(3);
-  await expect(page.locator('.project-list h3')).toHaveText(titles);
-  await expect(page.locator('.project-list .status')).toHaveText(['Developer-tooling prototype', 'Local prototype · In development', 'ML prototype']);
+  await expect(page.locator('.project-list > li')).toHaveCount(4);
+  await expect(page.locator('.project-list h3')).toHaveText(['Agent Workforce', ...titles]);
+  await expect(page.locator('.project-list .status')).toHaveText(['Open-source Go tooling', 'Developer-tooling prototype', 'Local prototype · In development', 'ML prototype']);
+  const workforce = page.getByRole('link', { name: 'Explore repository Agent Workforce', exact: true });
+  await expect(workforce).toHaveAttribute('href', 'https://github.com/donske07/agent-workforce');
+  await expect(workforce).not.toHaveAttribute('target');
   for (const [index, route] of routes.entries()) {
     await expect(page.getByRole('link', { name: `Read project ${titles[index]}`, exact: true })).toHaveAttribute('href', route);
   }
   const contributions = [
+    ['Go CLI', 'MCP server', 'nine focused specialists', 'manifest-tracked lifecycle management', 'localhost view'],
     ['local embeddings', 'vector index', 'references back to their sources'],
     ['bounded context', 'persistent execution state', 'budget checks before execution', 'trading older detail'],
     ['MovieLens', 'semantic retrieval', 'learning-to-rank', 'user and item features'],
@@ -49,9 +53,8 @@ async function identity(page) {
   for (const [index, phrases] of contributions.entries()) {
     for (const phrase of phrases) await expect(page.locator('.project-row').nth(index)).toContainText(phrase);
   }
-  await expect(page.locator('.intro')).toContainText('Outside work, my AI projects');
-  await expect(page.getByRole('heading', { name: 'Agent workforce tooling', exact: true })).toHaveCount(1);
-  await supportingWork(page);
+  await expect(page.locator('.intro')).toContainText('Outside work, I build tools for agent coordination');
+  await agentWorkforce(page);
   await expect(page.locator('#experience a')).toHaveCount(0);
   await expect(page.locator('.site-nav a')).toHaveText(['Work', 'Experience', 'Profile', 'Contact']);
   await expect(page.locator('.site-nav a')).toHaveCount(4);
@@ -71,30 +74,28 @@ async function identity(page) {
   expect(box.width).toBeLessThanOrEqual(246);
 }
 
-async function supportingWork(page) {
-  const workforce = page.getByRole('heading', { name: 'Agent workforce tooling', exact: true });
-  expect(await workforce.evaluate(element => element.closest('#experience'))).toBeNull();
-  const supporting = page.locator('main > section#experience + section#supporting-work');
-  await expect(supporting).toHaveCount(1);
-  await expect(supporting).toHaveAttribute('aria-labelledby', 'supporting-title');
-  await expect(supporting.locator('h2')).toHaveText('Supporting work');
-  await expect(supporting.locator('h3')).toHaveText('Agent workforce tooling');
-  for (const phrase of ['Independent CLI and MCP tooling', 'listing, syncing and validating specialist-agent definitions',
-    'dispatching tasks to an external runtime', 'execution stays with the runtime']) {
-    await expect(supporting).toContainText(phrase);
+async function agentWorkforce(page) {
+  const row = page.locator('.project-row').first();
+  await expect(row.locator('.project-number')).toHaveText('01');
+  await expect(row.locator('h3')).toHaveText('Agent Workforce');
+  for (const phrase of ['Go CLI and MCP server', 'ForgeCode coordinator', 'nine focused specialists',
+    'manifest-tracked lifecycle management', 'localhost view of delegated work']) {
+    await expect(row).toContainText(phrase);
   }
-  await expect(supporting.locator('.status')).toHaveText('Agent tooling');
-  await expect(supporting.locator('a, button')).toHaveCount(0);
+  await expect(row.locator('.status')).toHaveText('Open-source Go tooling');
+  await expect(row.getByRole('link', { name: 'Explore repository Agent Workforce', exact: true })).toHaveAttribute(
+    'href', 'https://github.com/donske07/agent-workforce');
+  await expect(page.locator('#supporting-work')).toHaveCount(0);
   await expect(page.locator('#experience > h2')).toHaveText('Professional experience');
   await expect(page.locator('#experience > p').first()).toHaveText(role);
   await expect(page.locator('#experience > p')).toHaveCount(2);
   await expect(page.locator('#experience > p').last()).toHaveText(
-    'My professional focus is data-platform engineering. The selected AI projects are independent work outside this role.');
+    'My professional focus is data-platform engineering. The selected engineering projects are independent work outside this role.');
 }
 
-test('supporting workforce is separate from employer experience', async ({ page }) => {
+test('agent workforce is the first selected project with a public repository', async ({ page }) => {
   await load(page);
-  await supportingWork(page);
+  await agentWorkforce(page);
 });
 
 async function fits(page) {

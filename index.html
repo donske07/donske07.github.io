@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Don Le | Staff Engineer · Data Platforms &amp; Applied AI</title>
-  <meta name="description" content="Don Le, Staff Engineer at mod.io, on data-platform work and independent AI projects in local retrieval, assistant execution and recommendation ranking.">
+  <meta name="description" content="Don Le, Staff Engineer at mod.io, showcasing open-source agent tooling and independent work in local retrieval, assistant execution and recommendation ranking.">
   <link rel="canonical" href="https://www.donske.com.au/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Don Le">
   <meta property="og:title" content="Don Le | Staff Engineer · Data Platforms &amp; Applied AI">
-  <meta property="og:description" content="Don Le, Staff Engineer at mod.io, on data-platform work and independent AI projects in local retrieval, assistant execution and recommendation ranking.">
+  <meta property="og:description" content="Don Le, Staff Engineer at mod.io, showcasing open-source agent tooling and independent work in local retrieval, assistant execution and recommendation ranking.">
   <meta property="og:url" content="https://www.donske.com.au/">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/tokens.css">
@@ -35,7 +35,7 @@
         <h1 id="intro-title">Don Le</h1>
         <p>Staff Engineer · Data Platforms &amp; Applied AI</p>
         <p class="current-role">Staff Engineer / Tech Lead &#8212; Data Platform at mod.io</p>
-        <p>I work on data platforms at mod.io. Outside work, my AI projects focus on retrieving useful context, managing assistant execution and ranking recommendations.</p>
+        <p>I work on data platforms at mod.io. Outside work, I build tools for agent coordination, local retrieval, reliable assistant execution and recommendation ranking.</p>
         <div class="link-cluster">
           <a href="#work">Selected projects</a>
           <a href="#contact">Get in touch</a>
@@ -44,10 +44,19 @@
       <img class="portrait" src="/covers/herophoto.png" width="246" height="263" alt="Portrait of Don Le">
     </section>
     <section class="stack" id="work" aria-labelledby="work-title">
-      <h2 id="work-title">Selected AI projects</h2>
+      <h2 id="work-title">Selected engineering projects</h2>
       <ol class="project-list">
         <li class="project-row">
           <span class="project-number" aria-hidden="true">01</span>
+          <div class="project-content stack">
+            <h3 id="workforce-title">Agent Workforce</h3>
+            <p>A Go CLI and MCP server for installing a ForgeCode coordinator and nine focused specialists, with manifest-tracked lifecycle management and a localhost view of delegated work.</p>
+            <p class="status">Open-source Go tooling</p>
+          </div>
+          <a class="project-link" href="https://github.com/donske07/agent-workforce" aria-labelledby="workforce-link workforce-title"><span id="workforce-link">Explore repository</span></a>
+        </li>
+        <li class="project-row">
+          <span class="project-number" aria-hidden="true">02</span>
           <div class="project-content stack">
             <h3 id="rag-title">Local-first RAG for coding agents</h3>
             <p>Making project context searchable for coding agents: local embeddings and a vector index retrieve passages from files and documentation, with references back to their sources.</p>
@@ -56,7 +65,7 @@
           <a class="project-link" href="/projects/local-rag/" aria-labelledby="rag-read rag-title"><span id="rag-read">Read project</span></a>
         </li>
         <li class="project-row">
-          <span class="project-number" aria-hidden="true">02</span>
+          <span class="project-number" aria-hidden="true">03</span>
           <div class="project-content stack">
             <h3 id="assistant-title">Personal AI assistant</h3>
             <p>Managing a conversation beyond the model response: bounded context, streamed output, persistent execution state and budget checks before execution.</p>
@@ -66,7 +75,7 @@
           <a class="project-link" href="/projects/personal-assistant/" aria-labelledby="assistant-read assistant-title"><span id="assistant-read">Read project</span></a>
         </li>
         <li class="project-row">
-          <span class="project-number" aria-hidden="true">03</span>
+          <span class="project-number" aria-hidden="true">04</span>
           <div class="project-content stack">
             <h3 id="recommender-title">Two-stage recommendation engine</h3>
             <p>Separating candidate search from ranking on MovieLens data: semantic retrieval finds candidates, then a learning-to-rank model orders them using user and item features.</p>
@@ -79,14 +88,7 @@
     <section class="prose" id="experience" aria-labelledby="experience-title">
       <h2 id="experience-title">Professional experience</h2>
       <p>Staff Engineer / Tech Lead &#8212; Data Platform at mod.io</p>
-      <p>My professional focus is data-platform engineering. The selected AI projects are independent work outside this role.</p>
-    </section>
-    <section class="prose" id="supporting-work" aria-labelledby="supporting-title">
-      <h2 id="supporting-title">Supporting work</h2>
-      <h3>Agent workforce tooling</h3>
-      <p class="status">Agent tooling</p>
-      <p>Independent CLI and MCP tooling for listing, syncing and validating specialist-agent definitions, then dispatching tasks to an external runtime.</p>
-      <p>Definition management and dispatch stay in the tooling; execution stays with the runtime.</p>
+      <p>My professional focus is data-platform engineering. The selected engineering projects are independent work outside this role.</p>
     </section>
   </main>
   <footer class="site-footer page-container stack" id="contact">
