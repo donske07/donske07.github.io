@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Two-stage recommendation engine | Don Le</title>
-  <meta name="description" content="An ML prototype combining semantic candidate retrieval and learning-to-rank over MovieLens data, with evaluation and serving limitations explained.">
+  <meta name="description" content="A two-stage MovieLens recommendation prototype: semantic candidate retrieval, feature-based reranking, score fusion, unknown-user fallback and evaluation design.">
   <link rel="canonical" href="https://www.donske.com.au/projects/recommender/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Two-stage recommendation engine | Don Le">
-  <meta property="og:description" content="An ML prototype combining semantic candidate retrieval and learning-to-rank over MovieLens data, with evaluation and serving limitations explained.">
+  <meta property="og:description" content="A two-stage MovieLens recommendation prototype: semantic candidate retrieval, feature-based reranking, score fusion, unknown-user fallback and evaluation design.">
   <meta property="og:url" content="https://www.donske.com.au/projects/recommender/">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/tokens.css">
@@ -31,21 +31,21 @@
   <main class="page-container section-stack" id="main" tabindex="-1">
     <section class="intro" aria-labelledby="project-title">
       <div class="intro-text stack">
-        <h1 id="project-title">Two-stage recom<wbr>mendation engine</h1>
+        <h1 id="project-title">Two-stage recommender</h1>
         <p class="status">ML prototype</p>
-        <p>A two-stage recommendation prototype combining semantic candidate retrieval with learning-to-rank over MovieLens data.</p>
+        <p>Finding plausible movies and ordering them are different ML problems. This MovieLens prototype combines semantic candidate retrieval with feature-based reranking, using rating history to connect the two stages.</p>
       </div>
     </section>
     <article class="prose" aria-label="Recommendation prototype case study">
-      <h2>Problem</h2>
-      <p>This prototype separates finding plausible movies from deciding how to order them, using MovieLens data as the setting for that distinction.</p>
-      <p>Candidate retrieval narrows the available choices, while the ranking stage scores the retrieved movies using additional user and movie signals.</p>
-      <h2>Implemented approach</h2>
-      <p>The embedding script combines movie titles and genres into text, encodes that text with a sentence-embedding model and normalizes the resulting vectors.</p>
-      <p>At serving time, a user's rating history supplies a weighted combination of movie vectors for the candidate query.</p>
-      <p>OpenSearch retrieves candidates, then the API builds feature vectors and obtains scores from an XGBoost learning-to-rank model.</p>
-      <p>The serving code can blend the ranking score with the retrieval score before sorting the result list.</p>
-      <p>Unknown users receive a popularity-based fallback rather than a personalized ranking inferred from history that isn't available.</p>
+      <h2>Why two stages</h2>
+      <p>Retrieval narrows the movie catalog to a candidate set. Ranking then applies additional user and movie signals to that shortlist, rather than scoring the entire catalog with the ranker.</p>
+      <p>This separation gives each stage a distinct job: retrieval determines which movies get considered, while learning-to-rank determines their order.</p>
+      <h2>From rating history to recommendations</h2>
+      <p>The embedding pipeline combines movie titles and genres into text, encodes it with a sentence-embedding model and normalizes the vectors. These vectors provide the representation used for candidate search.</p>
+      <p>At serving time, a user's ratings weight a combination of movie vectors into a user vector. That turns rating history into a query over the same embedding space.</p>
+      <p>OpenSearch retrieves candidates from that query. The API builds user and movie feature vectors for the candidates, then obtains scores from an XGBoost learning-to-rank model.</p>
+      <p>Score fusion can blend the ranker's score with the retrieval score before sorting. Its adjustable weighting controls how much each signal contributes to the final order.</p>
+      <p>For an unknown user, the API takes a popularity-based fallback path. This provides recommendations without treating missing rating history as evidence of personal taste.</p>
       <figure class="text-flow" aria-labelledby="flow-caption">
         <figcaption id="flow-caption">Implementation overview</figcaption>
         <ol>
@@ -56,23 +56,23 @@
           <li>Recommendations</li>
         </ol>
       </figure>
-      <h2>Trade-offs</h2>
-      <h3>Retrieval recall and ranking</h3>
+      <h2>Quality depends on both stages</h2>
+      <h3>Candidate recall sets the ceiling</h3>
       <p>Separating retrieval from ranking limits the second stage to the returned candidates, so the ranker can't recover a useful movie that retrieval missed.</p>
-      <p>This makes candidate selection a separate quality question from how well the ranker orders the movies it receives.</p>
-      <h3>Evaluation leakage and score scales</h3>
-      <p>A result would need to be read alongside the data split and candidate-selection procedure before it could support a broader quality claim.</p>
-      <p>Evaluation leakage and the comparability of retrieval and ranking score scales remain cautions, not verified resolutions.</p>
-      <h2>Evaluation and limits</h2>
-      <p>The ranker is configured for a pairwise learning objective and an NDCG evaluation metric, keeping the training objective distinct from the measure used to assess ordering.</p>
-      <p>Its training interface groups examples by user and accepts a separate validation dataset, so validation can monitor rankings within those groups.</p>
-      <p>That describes an evaluation mechanism, not a reproduced benchmark: no measured score or real-time performance result is claimed here.</p>
-      <p>This remains an ML prototype, with no claim of production deployment or observed user impact.</p>
+      <p>Quality evaluation should therefore measure candidate recall separately from ordering quality. A strong ordering of an incomplete shortlist can still miss the movies that matter to a user.</p>
+      <h3>Score fusion needs comparable scales</h3>
+      <p>Retrieval and ranking scores come from different models. Their score scales affect the blend: changing a weight alone doesn't establish a balanced contribution from each signal.</p>
+      <p>The fusion choice needs validation against ranking alone on the same candidates. Score comparability remains an open evaluation question, rather than an assumed property of the blend.</p>
+      <h2>Training and evaluation design</h2>
+      <p>The training interface groups examples by user, so the ranker learns ordering within each user's group. XGBoost is configured with a pairwise learning objective and an NDCG evaluation metric: the objective guides training, while the metric monitors ordering quality.</p>
+      <p>A separate validation dataset can be supplied to monitor those grouped rankings. A useful evaluation would test candidate recall, reranking and score fusion under a consistent split and candidate-selection procedure.</p>
+      <p>That design still needs checks for evaluation leakage, including whether held-out ratings influence the user vector or training features. Accepting a validation dataset doesn't by itself establish a leakage-free split.</p>
+      <p>This is an ML prototype; recommendation quality, serving latency and user impact remain unmeasured here, and production deployment is outside its demonstrated scope.</p>
     </article>
   </main>
   <footer class="site-footer page-container stack">
     <h2>About and contact</h2>
-    <p>This portfolio separates current data-platform work from prototype explorations in applied AI.</p>
+    <p>Explore more applied-AI projects and data-platform experience in the profile, or get in touch.</p>
     <div class="link-cluster">
       <a href="mailto:don.le@donske.com.au">Email: don.le@donske.com.au</a>
       <a href="https://github.com/donske07">GitHub</a>

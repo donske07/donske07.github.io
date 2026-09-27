@@ -50,16 +50,19 @@ async function fits(page) {
 }
 
 async function story(page) {
-  await expect(page.locator('h1')).toHaveText('Two-stage recommendation engine');
+  await expect(page.locator('h1')).toHaveText('Two-stage recommender');
+  await expect(page).toHaveTitle('Two-stage recommendation engine | Don Le');
   await expect(page.locator('.status')).toHaveText('ML prototype');
   await expect(page.locator('.text-flow ol > li')).toHaveText(stages);
   await expect(page.locator('main h2')).toHaveText([
-    'Problem', 'Implemented approach', 'Trade-offs', 'Evaluation and limits',
+    'Why two stages', 'From rating history to recommendations', 'Quality depends on both stages', 'Training and evaluation design',
   ]);
   const text = await page.locator('main').innerText();
   for (const phrase of ['MovieLens', 'semantic candidate retrieval', 'OpenSearch', 'XGBoost',
-    'pairwise learning objective', 'NDCG evaluation metric', 'not a reproduced benchmark',
-    "ranker can't recover", 'leakage', 'score scales', 'no claim of production deployment']) {
+    'pairwise learning objective', 'NDCG evaluation metric', 'normalizes the vectors', 'ratings weight a combination',
+    'user and movie feature vectors', 'Score fusion', 'unknown user', 'popularity-based fallback', 'groups examples by user',
+    'separate validation dataset', "ranker can't recover", 'evaluation leakage', 'score scales',
+    'remain unmeasured here', 'production deployment is outside its demonstrated scope']) {
     expect(text).toContain(phrase);
   }
   expect(text).not.toMatch(misleading);
