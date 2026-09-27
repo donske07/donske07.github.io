@@ -50,6 +50,10 @@ for (const javaScriptEnabled of [true, false]) {
         if (title === 'Agent Workforce') {
           await expect(page.getByRole('link', { name: 'View Agent Workforce on GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/donske07/agent-workforce');
           await expect(page.locator('.project-media img')).toHaveCount(2);
+          for (const index of [0, 1]) {
+            await expect(page.locator('.project-media img').nth(index)).toHaveAttribute('loading', 'lazy');
+            await expect(page.locator('.project-media img').nth(index)).toHaveAttribute('decoding', 'async');
+          }
           await expect(page.getByAltText('Pixel Agent Office showing the coordinator and nine specialist agents at individual desks', { exact: true })).toBeVisible();
           await expect(page.getByAltText('Agent Workforce command-line help listing install, session, diagnostics, office and lifecycle commands', { exact: true })).toBeVisible();
         } else {
