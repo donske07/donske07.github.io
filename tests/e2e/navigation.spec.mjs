@@ -2,7 +2,11 @@ import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
 const routes = ['/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/', '/404.html'];
-const titles = ['Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommendation engine'];
+const projects = [
+  { title: 'Local-first RAG for coding agents', heading: 'Local-first RAG for coding agents', route: '/projects/local-rag/' },
+  { title: 'Personal AI assistant', heading: 'Personal AI assistant', route: '/projects/personal-assistant/' },
+  { title: 'Two-stage recommendation engine', heading: 'Two-stage recommender', route: '/projects/recommender/' },
+];
 const retired = JSON.parse(await readFile(new URL('../fixtures/legacy-routes.json', import.meta.url), 'utf8')).retired;
 
 for (const route of routes) test(`every internal anchor reaches a real destination and fragment: ${route}`, async ({ page, context, baseURL }) => {
@@ -33,23 +37,30 @@ for (const javaScriptEnabled of [true, false]) {
       await expect(page.locator('.current-role')).toHaveText('Staff Engineer / Tech Lead — Data Platform at mod.io');
       await page.getByRole('link', { name: 'Selected projects', exact: true }).click();
       await expect(page).toHaveURL(`${baseURL}/#work`);
-      for (const title of titles) {
+      for (const { title, heading, route } of projects) {
         await page.getByRole('link', { name: `Read project ${title}`, exact: true }).click();
-        await expect(page.locator('h1')).toHaveText(title);
+        await expect(page).toHaveURL(`${baseURL}${route}`);
+        await expect(page).toHaveTitle(`${title} | Don Le`);
+        await expect(page.locator('h1')).toHaveText(heading);
         await expect(page.locator('.status').first()).toBeVisible();
-        await expect(page.getByRole('heading', { name: 'Trade-offs', exact: true })).toBeVisible();
+        await expect(page.getByRole('heading', { name: title === 'Two-stage recommendation engine' ? 'Quality depends on both stages' : 'Trade-offs', exact: true })).toBeVisible();
         await expect(page.locator('figure ol > li')).toHaveCount(5);
-        await expect(page.getByRole('heading', { name: /limits/i })).toBeVisible();
+        await expect(page.getByRole('heading', { name: /Project scope|Training and evaluation design/ })).toBeVisible();
         await expect(page.getByRole('link', { name: /source|demo/i })).toHaveCount(0);
-        if (title === 'Personal AI assistant') await expect(page.getByText('This project is not production-ready.', { exact: true })).toBeVisible();
+        if (title === 'Personal AI assistant') {
+          await expect(page.locator('.status')).toHaveText('Local prototype · In development');
+          await expect(page.locator('[aria-labelledby="limits-title"]')).toContainText('not a deployed service');
+        }
         await page.getByRole('navigation').getByRole('link', { name: 'Work', exact: true }).click();
         await expect(page).toHaveURL(`${baseURL}/#work`);
       }
       await page.getByRole('navigation').getByRole('link', { name: 'Profile', exact: true }).click();
       await expect(page.getByText("Use your browser's Print command to save a copy.", { exact: true })).toBeVisible();
-      for (const title of titles) {
+      for (const { title, heading, route } of projects) {
         await page.getByRole('link', { name: title, exact: true }).click();
-        await expect(page.locator('h1')).toHaveText(title);
+        await expect(page).toHaveURL(`${baseURL}${route}`);
+        await expect(page).toHaveTitle(`${title} | Don Le`);
+        await expect(page.locator('h1')).toHaveText(heading);
         await page.goBack();
         await expect(page).toHaveURL(`${baseURL}/cv/`);
       }

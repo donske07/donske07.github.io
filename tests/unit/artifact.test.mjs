@@ -39,6 +39,25 @@ test('exact public artifact and five metadata routes pass', async t => {
   assert.equal(run().status, 0, run().stderr);
 });
 
+test('reject stale matching descriptions and mismatched OG descriptions on every route', async t => {
+  const { dist, run } = await fixture(t);
+  for (const name of files.filter(name => name.endsWith('index.html'))) {
+    const file = path.join(dist, name);
+    const original = await readFile(file, 'utf8');
+    for (const pattern of [
+      /(<meta (?:name="description"|property="og:description") content=")[^"]+/g,
+      /(<meta property="og:description" content=")[^"]+/,
+    ]) {
+      const mutated = original.replace(pattern, '$1Obsolete project description.');
+      assert.notEqual(mutated, original, `${name}: mutation must change metadata`);
+      await writeFile(file, mutated);
+      rejects(run, /description/);
+      await writeFile(file, original);
+    }
+  }
+  assert.equal(run().status, 0);
+});
+
 test('reject wrong canonical host and a retired sitemap URL', async t => {
   const { dist, run } = await fixture(t);
   const home = path.join(dist, 'index.html');

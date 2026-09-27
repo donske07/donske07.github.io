@@ -8,11 +8,11 @@ const dist = path.resolve(process.env.DIST_DIR ?? path.join(root, 'dist'));
 const manifest = path.resolve(process.env.MANIFEST_FILE ?? path.join(root, 'scripts/publish-files.json'));
 const origin = 'https://www.donske.com.au';
 const routes = new Map([
-  ['index.html', ['/', 'Don Le | Staff Engineer · Data Platforms & Applied AI', "Don Le's data-platform focus and selected applied-AI prototypes in local retrieval, personal assistance and recommendation ranking."]],
+  ['index.html', ['/', 'Don Le | Staff Engineer · Data Platforms & Applied AI', 'Don Le, Staff Engineer at mod.io, on data-platform work and independent AI projects in local retrieval, assistant execution and recommendation ranking.']],
   ['projects/local-rag/index.html', ['/projects/local-rag/', 'Local-first RAG for coding agents | Don Le', 'A developer-tooling prototype using local embeddings, chunked sources and a vector index to retrieve project context for coding agents.']],
-  ['projects/personal-assistant/index.html', ['/projects/personal-assistant/', 'Personal AI assistant | Don Le', 'An in-development local assistant prototype exploring streamed responses, bounded context, persistent execution state and cost controls; not production-ready.']],
-  ['projects/recommender/index.html', ['/projects/recommender/', 'Two-stage recommendation engine | Don Le', 'An ML prototype combining semantic candidate retrieval and learning-to-rank over MovieLens data, with evaluation and serving limitations explained.']],
-  ['cv/index.html', ['/cv/', 'Profile | Don Le', "Don Le's current data-platform role, applied-AI prototype summaries and contact details in a printable profile."]],
+  ['projects/personal-assistant/index.html', ['/projects/personal-assistant/', 'Personal AI assistant | Don Le', 'An in-development assistant exploring reliable conversation execution through idempotent replay, persistent state, bounded context, stream validation and budget controls.']],
+  ['projects/recommender/index.html', ['/projects/recommender/', 'Two-stage recommendation engine | Don Le', 'A two-stage MovieLens recommendation prototype: semantic candidate retrieval, feature-based reranking, score fusion, unknown-user fallback and evaluation design.']],
+  ['cv/index.html', ['/cv/', 'Profile | Don Le', "Don Le's professional profile: data-platform engineering and independent applied-AI work in retrieval, conversation execution and recommendation ranking."]],
 ]);
 // Independent of the editable manifest: expanding it must not authorize publication.
 const publicFiles = [...routes.keys(), '404.html', 'assets/css/tokens.css', 'assets/css/site.css',
