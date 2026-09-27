@@ -7,6 +7,7 @@ const evidence = process.env.EVIDENCE_DIR || '.omo/evidence/recruiter-ai-portfol
 const require = createRequire(import.meta.url);
 const tabKey = browserName => process.platform === 'darwin' && browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
 const titles = ['Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommendation engine'];
+const headings = ['Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommender'];
 const routes = ['/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/'];
 const role = 'Staff Engineer / Tech Lead — Data Platform at mod.io';
 const save = (name, data) => writeFile(`${evidence}/task-6-${name}.json`, JSON.stringify(data, null, 2));
@@ -40,7 +41,15 @@ async function identity(page) {
   for (const [index, route] of routes.entries()) {
     await expect(page.getByRole('link', { name: `Read project ${titles[index]}`, exact: true })).toHaveAttribute('href', route);
   }
-  await expect(page.getByText('Not production-ready; cloud deployment and live billing remain unverified.', { exact: true })).toBeVisible();
+  const contributions = [
+    ['local embeddings', 'vector index', 'references back to their sources'],
+    ['bounded context', 'persistent execution state', 'budget checks before execution', 'trading older detail'],
+    ['MovieLens', 'semantic retrieval', 'learning-to-rank', 'user and item features'],
+  ];
+  for (const [index, phrases] of contributions.entries()) {
+    for (const phrase of phrases) await expect(page.locator('.project-row').nth(index)).toContainText(phrase);
+  }
+  await expect(page.locator('.intro')).toContainText('Outside work, my AI projects');
   await expect(page.getByRole('heading', { name: 'Agent workforce tooling', exact: true })).toHaveCount(1);
   await supportingWork(page);
   await expect(page.locator('#experience a')).toHaveCount(0);
@@ -70,16 +79,17 @@ async function supportingWork(page) {
   await expect(supporting).toHaveAttribute('aria-labelledby', 'supporting-title');
   await expect(supporting.locator('h2')).toHaveText('Supporting work');
   await expect(supporting.locator('h3')).toHaveText('Agent workforce tooling');
-  await expect(supporting.locator('p')).toHaveText([
-    'Agent tooling',
-    'CLI and MCP tooling for managing specialist-agent definitions and dispatching work through an external agent runtime.',
-    'The tooling manages definitions and dispatch; the external runtime carries out the agent work.',
-  ]);
+  for (const phrase of ['Independent CLI and MCP tooling', 'listing, syncing and validating specialist-agent definitions',
+    'dispatching tasks to an external runtime', 'execution stays with the runtime']) {
+    await expect(supporting).toContainText(phrase);
+  }
   await expect(supporting.locator('.status')).toHaveText('Agent tooling');
   await expect(supporting.locator('a, button')).toHaveCount(0);
-  await expect(page.locator('#experience > *')).toHaveText([
-    'Professional experience', role, 'Current focus: data platforms.',
-  ]);
+  await expect(page.locator('#experience > h2')).toHaveText('Professional experience');
+  await expect(page.locator('#experience > p').first()).toHaveText(role);
+  await expect(page.locator('#experience > p')).toHaveCount(2);
+  await expect(page.locator('#experience > p').last()).toHaveText(
+    'My professional focus is data-platform engineering. The selected AI projects are independent work outside this role.');
 }
 
 test('supporting workforce is separate from employer experience', async ({ page }) => {
@@ -141,7 +151,8 @@ test('native fragments and destination contract (route visits in production mode
       await page.goto('/');
       await page.getByRole('link', { name: `Read project ${titles[index]}`, exact: true }).click();
       await expect(page).toHaveURL(new RegExp(`${route}$`));
-      await expect(page.locator('h1')).toHaveText(titles[index]);
+      await expect(page).toHaveTitle(`${titles[index]} | Don Le`);
+      await expect(page.locator('h1')).toHaveText(headings[index]);
     }
     const response = await page.goto('/cv/');
     expect(response.status()).toBe(200);

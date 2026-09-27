@@ -28,15 +28,19 @@ async function supported(page) {
   await expect(page.getByText('Staff Engineer · Data Platforms & Applied AI', { exact: true })).toBeVisible();
   await expect(page.locator('.project-row')).toHaveCount(3);
   await expect(page.locator('.status')).toHaveText(statuses);
-  await expect(page.getByText('Data platforms and applied-AI prototypes, with selected work covering retrieval, conversation execution and recommendation ranking.', { exact: true })).toBeVisible();
+  const currentRole = page.locator('[aria-labelledby="role-title"]');
+  await expect(currentRole).toContainText('professional focus is data-platform engineering');
+  await expect(currentRole).toContainText('Alongside my current role');
+  await expect(currentRole).toContainText('independent projects');
   const summaries = [
-    'A local-first retrieval plugin for coding agents, using local embeddings and a vector index to search project files and documentation.',
-    'A local assistant prototype exploring streamed model responses, bounded context, persistent execution state and cost controls.',
-    'A two-stage recommendation prototype combining semantic candidate retrieval with learning-to-rank over MovieLens data.',
+    ['local embeddings', 'vector index', 'Separate indexing and search tools', 'source references'],
+    ['bounded recent context', 'persistent execution state', 'Request replay and conflict handling', 'budget admission and cancellation'],
+    ['semantic candidate retrieval', 'learning-to-rank', 'MovieLens', 'Rating-weighted user vectors', 'pairwise ranker', 'popularity fallback'],
   ];
-  for (const summary of summaries) await expect(page.getByText(summary, { exact: true })).toBeVisible();
+  for (const [index, phrases] of summaries.entries()) {
+    for (const phrase of phrases) await expect(page.locator('.project-row').nth(index)).toContainText(phrase);
+  }
   for (let i = 0; i < titles.length; i++) await expect(page.getByRole('link', { name: titles[i], exact: true })).toHaveAttribute('href', routes[i]);
-  await expect(page.getByText('Not production-ready; cloud deployment and live billing remain unverified.', { exact: true })).toBeVisible();
   await expect(page.locator('a[href="mailto:don.le@donske.com.au"]')).toBeVisible();
   await expect(page.locator('a[href="https://github.com/donske07"]')).toBeVisible();
   await expect(page.getByText("Use your browser's Print command to save a copy.", { exact: true })).toBeVisible();

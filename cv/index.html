@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Profile | Don Le</title>
-  <meta name="description" content="Don Le's current data-platform role, applied-AI prototype summaries and contact details in a printable profile.">
+  <meta name="description" content="Don Le's professional profile: data-platform engineering and independent applied-AI work in retrieval, conversation execution and recommendation ranking.">
   <link rel="canonical" href="https://www.donske.com.au/cv/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Profile | Don Le">
-  <meta property="og:description" content="Don Le's current data-platform role, applied-AI prototype summaries and contact details in a printable profile.">
+  <meta property="og:description" content="Don Le's professional profile: data-platform engineering and independent applied-AI work in retrieval, conversation execution and recommendation ranking.">
   <meta property="og:url" content="https://www.donske.com.au/cv/">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/tokens.css">
@@ -40,9 +40,9 @@
     <section class="prose" aria-labelledby="role-title">
       <h2 id="role-title">Current role</h2>
       <p class="current-role">Staff Engineer / Tech Lead &#8212; Data Platform at mod.io</p>
-      <p>Current focus: data platforms.</p>
-      <h2>Focus</h2>
-      <p>Data platforms and applied-AI prototypes, with selected work covering retrieval, conversation execution and recommendation ranking.</p>
+      <p>My professional focus is data-platform engineering. Alongside my current role, I explore applied AI through independent projects in retrieval, conversation execution and recommendation ranking.</p>
+      <h2>Engineering focus</h2>
+      <p>The selected work below centres on practical engineering decisions: how to retrieve useful context, manage a model response through its execution lifecycle, and separate candidate retrieval from ranking.</p>
     </section>
     <section class="stack" aria-labelledby="projects-title">
       <h2 id="projects-title">Selected projects</h2>
@@ -51,7 +51,7 @@
           <span class="project-number" aria-hidden="true">01</span>
           <div class="project-content stack">
             <h3><a href="/projects/local-rag/">Local-first RAG for coding agents</a></h3>
-            <p>A local-first retrieval plugin for coding agents, using local embeddings and a vector index to search project files and documentation.</p>
+            <p>Making project context searchable for coding agents through local embeddings and a vector index. Separate indexing and search tools support explicit source selection, while retrieved passages include source references for follow-up.</p>
             <p class="status">Developer-tooling prototype</p>
           </div>
         </li>
@@ -59,16 +59,15 @@
           <span class="project-number" aria-hidden="true">02</span>
           <div class="project-content stack">
             <h3><a href="/projects/personal-assistant/">Personal AI assistant</a></h3>
-            <p>A local assistant prototype exploring streamed model responses, bounded context, persistent execution state and cost controls.</p>
+            <p>Managing conversation execution around streamed model responses, bounded recent context and persistent execution state. Request replay and conflict handling sit alongside budget admission and cancellation controls.</p>
             <p class="status">Local prototype · In development</p>
-            <p>Not production-ready; cloud deployment and live billing remain unverified.</p>
           </div>
         </li>
         <li class="project-row">
           <span class="project-number" aria-hidden="true">03</span>
           <div class="project-content stack">
             <h3><a href="/projects/recommender/">Two-stage recommendation engine</a></h3>
-            <p>A two-stage recommendation prototype combining semantic candidate retrieval with learning-to-rank over MovieLens data.</p>
+            <p>Separating semantic candidate retrieval from learning-to-rank over MovieLens data. Rating-weighted user vectors guide retrieval, a pairwise ranker orders candidates, and a popularity fallback handles unknown users.</p>
             <p class="status">ML prototype</p>
           </div>
         </li>
