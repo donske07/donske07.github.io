@@ -22,7 +22,7 @@ test('RAG story has server text, qualified claims and native destinations', asyn
   await openStory(page);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Local-first RAG for coding agents');
   await expect(page.locator('.status')).toHaveText('Developer-tooling prototype');
-  for (const heading of ['Problem', 'Implemented approach', 'Trade-offs', 'Limits and current status']) {
+  for (const heading of ['Search project context, not every document', 'Source indexing and traceable retrieval', 'Trade-offs', 'Project scope and source judgment']) {
     await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible();
   }
   await expect(page.getByRole('figure', { name: 'Implementation overview' }).locator('ol > li')).toHaveText(stages);
@@ -40,11 +40,12 @@ test('RAG story has server text, qualified claims and native destinations', asyn
   await expect(page.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/donske07');
   await expect(page.getByRole('link', { name: 'Email: don.le@donske.com.au' })).toHaveAttribute('href', 'mailto:don.le@donske.com.au');
   const text = await page.locator('main').innerText();
-  expect(text).toContain("that check isn't an audit of the selected content");
-  expect(text).toContain("They don't establish that the whole workflow is private");
-  expect(text).toContain('not measured retrieval quality, latency or production adoption');
-  expect(text).toContain('Freshness and reindexing');
-  expect(text).toContain("not treated as instructions that override the agent's task");
+  for (const phrase of ['explicit confirmation argument', 'selected independently', 'Chunk size and overlap',
+    'tokens and document structure', 'A local model embeds', 'Postgres vector index', 'cosine distance',
+    'source-type filters', 'source references', 'source changes need reindexing', 'separate data-handling boundaries',
+    'traceable, not authoritative', 'untrusted source content, not instructions', "doesn't decide whether the content is safe to follow"]) {
+    expect(text).toContain(phrase);
+  }
   const html = await page.content();
   expect(html).not.toMatch(/\/Users\/|\.omo\/|localhost|api[_-]?key|fetch\(|XMLHttpRequest|production-ready|coming soon/i);
   expect(text).not.toMatch(/\d+%/);
@@ -74,7 +75,7 @@ test('RAG story and schematic survive JavaScript and CSS unavailability', async 
     await expect(page.locator('.status')).toBeVisible();
     await page.locator('style, link[rel="stylesheet"]').evaluateAll(nodes => nodes.forEach(node => node.remove()));
     await expect(page.locator('figure ol > li')).toHaveText(stages);
-    await expect(page.getByRole('heading', { name: 'Limits and current status' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Project scope and source judgment' })).toBeVisible();
   } finally {
     await context.close();
   }

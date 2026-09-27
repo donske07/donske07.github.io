@@ -33,21 +33,21 @@
       <div class="intro-text stack">
         <h1>Local-first RAG for coding agents</h1>
         <p class="status">Developer-tooling prototype</p>
-        <p>A local-first retrieval plugin for coding agents, using local embeddings and a vector index to search project files and documentation.</p>
+        <p>A local-first retrieval plugin that gives coding agents a way to search project context. The work connects configurable source indexing, local embeddings and vector search, returning passages with references to their source.</p>
       </div>
     </header>
     <section class="prose" aria-labelledby="problem-title">
-      <h2 id="problem-title">Problem</h2>
-      <p>The problem explored here is how to give a coding agent relevant project context without treating every file or document as part of every request.</p>
-      <p>A retrieval index offers a separate place to search that material, then return selected passages for the agent to inspect.</p>
+      <h2 id="problem-title">Search project context, not every document</h2>
+      <p>A coding agent needs context from project files and documentation, but including every document in every request makes context selection an all-or-nothing choice.</p>
+      <p>This prototype separates collecting source material from retrieving it. An index holds searchable passages, so the agent can request selected context and inspect where it came from.</p>
     </section>
     <section class="prose" aria-labelledby="approach-title">
-      <h2 id="approach-title">Implemented approach</h2>
-      <p>Indexing requires an explicit confirmation argument before the tool calls the indexer; that check isn't an audit of the selected content.</p>
-      <p>Files, documentation and configured web sources can be selected independently, with chunk size and overlap passed into the collection process.</p>
-      <p>The documented chunking approach uses tokens and document structure, including headings and paragraphs, rather than treating each document as one indivisible search result.</p>
-      <p>Collected chunks are embedded with a local model and passed to a Postgres vector index alongside their source type and source reference.</p>
-      <p>Search uses cosine distance and accepts source-type filters, allowing a request to distinguish files, documentation and web material. Returned passages include source references, giving the reader a way to identify where the selected context came from.</p>
+      <h2 id="approach-title">Source indexing and traceable retrieval</h2>
+      <p>Indexing requires an explicit confirmation argument before the tool calls the indexer. This guard makes indexing a deliberate tool operation, separate from a search request.</p>
+      <p>Files, documentation and configured web sources can be selected independently. Chunk size and overlap are passed into collection, making source coverage and passage boundaries configurable rather than fixed for every project.</p>
+      <p>The documented chunking approach uses tokens and document structure, including headings and paragraphs. Passages become the unit of retrieval instead of entire documents.</p>
+      <p>A local model embeds the collected chunks. A Postgres vector index stores those embeddings alongside source types and source references, keeping the search representation linked to its origin.</p>
+      <p>Search uses cosine distance and accepts source-type filters to distinguish files, documentation and web material. Returned passages include source references, so a reader can locate the original material and check its context.</p>
       <figure class="text-flow" aria-labelledby="flow-caption">
         <figcaption id="flow-caption">Implementation overview</figcaption>
         <ol>
@@ -63,16 +63,16 @@
     <section class="prose" aria-labelledby="tradeoffs-title">
       <h2 id="tradeoffs-title">Trade-offs</h2>
       <h3>Freshness and reindexing</h3>
-      <p>The prototype exposes separate indexing and search tools, so adding source material and asking a question are distinct operations.</p>
-      <p>Local embeddings keep that processing step local, but they also require a model and database to be available in the configured environment. They don't establish that the whole workflow is private, particularly when configured web sources or a separate coding-agent runtime are involved.</p>
+      <p>Separate indexing and search tools let the agent query the collected material without starting a new collection. The trade-off is freshness: search reflects the indexed material, so source changes need reindexing before they can be reflected in retrieved passages.</p>
+      <p>Local embeddings keep the embedding step local and require a model and database in the configured environment. Web-source access and the coding-agent runtime remain separate data-handling boundaries to consider when choosing what to index and where to send retrieved context.</p>
       <h3>Chunking and retrieval</h3>
-      <p>Chunking makes passages the unit of retrieval, while overlap carries some neighboring context at the cost of repeating material in the index. Those choices affect what a search can return; they aren't evidence that a particular chunk size produces better answers.</p>
+      <p>Smaller chunks narrow the context returned in each passage; larger chunks carry more surrounding material. Overlap helps retain neighboring context across boundaries at the cost of repeating material in the index. These settings need to suit the documents and questions the agent will work with.</p>
     </section>
     <section class="prose" aria-labelledby="limits-title">
-      <h2 id="limits-title">Limits and current status</h2>
-      <p>This is a developer-tooling prototype, not a claim of a released or audited retrieval service.</p>
-      <p>The available evidence describes implementation and configuration, not measured retrieval quality, latency or production adoption.</p>
-      <p>Retrieved material still needs to be assessed as source content, not treated as instructions that override the agent's task.</p>
+      <h2 id="limits-title">Project scope and source judgment</h2>
+      <p>The prototype focuses on the retrieval layer for coding agents: choosing sources, indexing passages and returning filtered context with source references.</p>
+      <p>Source references make a result traceable, not authoritative. Before relying on a passage, the reader or agent needs to check its relevance and whether the original source has changed since indexing.</p>
+      <p>Retrieved text is untrusted source content, not instructions that override the agent's task. The indexing confirmation guard controls when collection starts; it doesn't decide whether the content is safe to follow.</p>
     </section>
   </main>
   <footer class="site-footer page-container stack">
