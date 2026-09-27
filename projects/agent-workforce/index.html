@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Workforce | Don Le</title>
+  <meta name="description" content="An open-source Go CLI that coordinates specialist coding agents through generated MCP tools, managed lifecycles and an optional Pixel Office view.">
+  <link rel="canonical" href="https://www.donske.com.au/projects/agent-workforce/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Agent Workforce | Don Le">
+  <meta property="og:description" content="An open-source Go CLI that coordinates specialist coding agents through generated MCP tools, managed lifecycles and an optional Pixel Office view.">
+  <meta property="og:url" content="https://www.donske.com.au/projects/agent-workforce/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/print.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header page-container">
+    <a class="site-identity" href="/">Don Le</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="link-cluster">
+        <li><a href="/#work">Work</a></li>
+        <li><a href="/#experience">Experience</a></li>
+        <li><a href="/cv/">Profile</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="page-container section-stack" id="main" tabindex="-1">
+    <header class="intro">
+      <div class="intro-text stack">
+        <h1>Agent Workforce</h1>
+        <p class="status">Open-source Go tooling · Public v0.1.0</p>
+        <p>A CLI and coordination layer for assembling specialist coding agents behind generated MCP tools. It gives one Forge coordinator a consistent way to delegate focused work while the CLI manages setup, process lifecycles and an optional visual workspace.</p>
+      </div>
+    </header>
+    <section class="prose" aria-labelledby="problem-title">
+      <h2 id="problem-title">Turn specialist agents into one usable team</h2>
+      <p>Coding agents are useful in distinct roles such as planning, implementation and review, but coordinating several of them often means maintaining separate prompts, commands and runtime processes by hand.</p>
+      <p>Agent Workforce packages those roles into a single local workflow. The coordinator sees each specialist as an MCP tool, so delegation fits the same tool-calling model used for files, search and other development operations.</p>
+    </section>
+    <section class="prose" aria-labelledby="approach-title">
+      <h2 id="approach-title">Generated tools and managed lifecycles</h2>
+      <p>The project ships two commands. <code>agent-workforce</code> owns installation, lifecycle management, diagnostics, Forge session launch and the visual Office. <code>agent-workforce-mcp</code> is the stdio MCP server used by generated specialist integrations. Both are needed for the complete workflow.</p>
+      <p><code>install</code> writes package-owned agents and skills into the selected Forge configuration, generates specialist MCP configuration under <code>~/.agent-workforce/mcp</code> and records owned files in a manifest. <code>doctor</code> checks that setup, while <code>new</code> starts ForgeCode with the coordinator and forwards the remaining prompt arguments.</p>
+      <p>Nine specialist definitions cover backend, frontend, AI, workflow, policy, data, privacy and security, QA, and MCP platform work. They become generated MCP tools rather than ad hoc shell invocations. The coordinator chooses when to delegate and synthesizes returned work into one response.</p>
+      <figure class="text-flow" aria-labelledby="flow-caption">
+        <figcaption id="flow-caption">Coordination flow</figcaption>
+        <ol>
+          <li>CLI launch</li>
+          <li>Forge coordinator</li>
+          <li>Generated MCP tool</li>
+          <li>Focused specialist</li>
+          <li>Synthesized result</li>
+        </ol>
+      </figure>
+      <p>One command → managed runtime → coordinator decision → specialist tool call → consolidated result.</p>
+    </section>
+    <figure class="project-media">
+      <img src="/assets/img/agent-workforce-terminal.png" width="1312" height="850" alt="Agent Workforce command-line help listing install, session, diagnostics, office and lifecycle commands">
+      <figcaption>The command surface separates installation, diagnostics, session launch, Office startup and package-owned lifecycle operations.</figcaption>
+    </figure>
+    <section class="prose" aria-labelledby="operations-title">
+      <h2 id="operations-title">Operate and inspect the workforce</h2>
+      <p>The <code>agents</code> command group lists and validates installed definitions, activates or deactivates individual specialists and synchronizes custom overrides. Automation-oriented commands can emit machine-readable JSON instead of requiring callers to parse formatted terminal output.</p>
+      <p><code>status</code> reads installation state from the manifest. <code>update</code> refreshes installed assets, and <code>uninstall</code> removes only the package-owned projections recorded there. User-authored custom agent source files are retained unless state removal is explicitly requested.</p>
+      <p>The Pixel Agent Office runs on <code>127.0.0.1:8765</code>. It shows the coordinator, specialists, active delegation state and delegated Forge output. Because prompts and command output may be visible, the server accepts loopback and same-origin access only rather than exposing a LAN or public bind.</p>
+    </section>
+    <figure class="project-media">
+      <img src="/assets/img/agent-workforce-office.png" width="1425" height="1517" alt="Pixel Agent Office showing the coordinator and nine specialist agents at individual desks">
+      <figcaption>The localhost Pixel Agent Office makes delegation state visible while the command-line workflow remains the control surface.</figcaption>
+    </figure>
+    <section class="prose" aria-labelledby="tradeoffs-title">
+      <h2 id="tradeoffs-title">Trade-offs</h2>
+      <h3>Specialization and coordination</h3>
+      <p>Giving each agent a narrow role makes responsibilities easier to understand, but the coordinator still has to select the right specialist and reconcile overlapping answers. More agents are not automatically better; each role needs a distinct purpose.</p>
+      <h3>Convenience and local state</h3>
+      <p>Managed installation and lifecycle handling reduce manual setup. In return, the CLI owns configuration, generated tools and process state that need to stay understandable and removable. The tracked installation manifest makes that boundary explicit.</p>
+    </section>
+    <section class="prose" aria-labelledby="limits-title">
+      <h2 id="limits-title">Project scope and source</h2>
+      <p>The public v0.1.0 release targets local ForgeCode workflows on macOS and Linux for <code>amd64</code> and <code>arm64</code>. Release archives include both executables; building from source requires Go 1.25.13 or newer. It demonstrates the coordination model, generated specialist tools, diagnostics and Pixel Office integration without claiming production adoption or performance outcomes.</p>
+      <p>The implementation, release notes and setup instructions are available in the public repository.</p>
+      <p><a href="https://github.com/donske07/agent-workforce">View Agent Workforce on GitHub</a></p>
+    </section>
+  </main>
+  <footer class="site-footer page-container stack">
+    <h2>Contact</h2>
+    <div class="link-cluster">
+      <a href="mailto:don.le@donske.com.au">Email: don.le@donske.com.au</a>
+      <a href="https://github.com/donske07">GitHub</a>
+      <a href="/cv/">Profile</a>
+    </div>
+  </footer>
+</body>
+</html>

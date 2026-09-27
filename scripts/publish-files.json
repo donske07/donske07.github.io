@@ -1,5 +1,6 @@
 [
   "index.html",
+  "projects/agent-workforce/index.html",
   "projects/local-rag/index.html",
   "projects/personal-assistant/index.html",
   "projects/recommender/index.html",
@@ -8,6 +9,8 @@
   "assets/css/tokens.css",
   "assets/css/site.css",
   "assets/css/print.css",
+  "assets/img/agent-workforce-office.png",
+  "assets/img/agent-workforce-terminal.png",
   "assets/favicon.svg",
   "assets/social-card.svg",
   "covers/herophoto.png",

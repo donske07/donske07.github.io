@@ -10,7 +10,7 @@ import { chromium } from 'playwright';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const evidence = path.resolve(root, process.env.EVIDENCE_DIR || '.omo/evidence/recruiter-ai-portfolio', `task-13-audit-${Date.now()}-${process.pid}`);
-const routes = ['/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/'];
+const routes = ['/', '/projects/agent-workforce/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/'];
 const categories = ['performance', 'accessibility', 'best-practices', 'seo'];
 const presets = { mobile: undefined, desktop: desktopConfig };
 const samples = 3;
@@ -92,7 +92,7 @@ async function main() {
     await waitFor(origin, preview);
     const notFound = await fetch(`${origin}/this-route-does-not-exist/`);
     if (notFound.status !== 404 || !/<meta\s+name="robots"\s+content="noindex(?:,\s*nofollow)?"/i.test(await notFound.text())) {
-      throw new Error('404 must return HTTP 404 and noindex; it is excluded from the five indexable-page SEO gate');
+      throw new Error('404 must return HTTP 404 and noindex; it is excluded from the six indexable-page SEO gate');
     }
     result.environment.notFound = 'HTTP 404, noindex, excluded from indexable-page audit';
     profile = await mkdtemp(path.join(os.tmpdir(), 'portfolio-audit-chrome-'));

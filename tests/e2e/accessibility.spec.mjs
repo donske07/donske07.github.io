@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const routes = ['/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/', '/404.html'];
+const routes = ['/', '/projects/agent-workforce/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/', '/404.html'];
 // Safari's macOS default uses Option+Tab for links, unlike other platforms.
 const tabKey = browserName => browserName === 'webkit' && process.platform === 'darwin' ? 'Alt+Tab' : 'Tab';
 

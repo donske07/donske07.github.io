@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
-const routes = ['/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/', '/404.html'];
+const routes = ['/', '/projects/agent-workforce/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/', '/404.html'];
 const projects = [
-  { title: 'Local-first RAG for coding agents', heading: 'Local-first RAG for coding agents', route: '/projects/local-rag/' },
-  { title: 'Personal AI assistant', heading: 'Personal AI assistant', route: '/projects/personal-assistant/' },
-  { title: 'Two-stage recommendation engine', heading: 'Two-stage recommender', route: '/projects/recommender/' },
+  { title: 'Agent Workforce', heading: 'Agent Workforce', route: '/projects/agent-workforce/', profile: false },
+  { title: 'Local-first RAG for coding agents', heading: 'Local-first RAG for coding agents', route: '/projects/local-rag/', profile: true },
+  { title: 'Personal AI assistant', heading: 'Personal AI assistant', route: '/projects/personal-assistant/', profile: true },
+  { title: 'Two-stage recommendation engine', heading: 'Two-stage recommender', route: '/projects/recommender/', profile: true },
 ];
 const retired = JSON.parse(await readFile(new URL('../fixtures/legacy-routes.json', import.meta.url), 'utf8')).retired;
 
@@ -46,7 +47,14 @@ for (const javaScriptEnabled of [true, false]) {
         await expect(page.getByRole('heading', { name: title === 'Two-stage recommendation engine' ? 'Quality depends on both stages' : 'Trade-offs', exact: true })).toBeVisible();
         await expect(page.locator('figure ol > li')).toHaveCount(5);
         await expect(page.getByRole('heading', { name: /Project scope|Training and evaluation design/ })).toBeVisible();
-        await expect(page.getByRole('link', { name: /source|demo/i })).toHaveCount(0);
+        if (title === 'Agent Workforce') {
+          await expect(page.getByRole('link', { name: 'View Agent Workforce on GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/donske07/agent-workforce');
+          await expect(page.locator('.project-media img')).toHaveCount(2);
+          await expect(page.getByAltText('Pixel Agent Office showing the coordinator and nine specialist agents at individual desks', { exact: true })).toBeVisible();
+          await expect(page.getByAltText('Agent Workforce command-line help listing install, session, diagnostics, office and lifecycle commands', { exact: true })).toBeVisible();
+        } else {
+          await expect(page.getByRole('link', { name: /source|demo/i })).toHaveCount(0);
+        }
         if (title === 'Personal AI assistant') {
           await expect(page.locator('.status')).toHaveText('Local prototype · In development');
           await expect(page.locator('[aria-labelledby="limits-title"]')).toContainText('not a deployed service');
@@ -56,7 +64,7 @@ for (const javaScriptEnabled of [true, false]) {
       }
       await page.getByRole('navigation').getByRole('link', { name: 'Profile', exact: true }).click();
       await expect(page.getByText("Use your browser's Print command to save a copy.", { exact: true })).toBeVisible();
-      for (const { title, heading, route } of projects) {
+      for (const { title, heading, route } of projects.filter(project => project.profile)) {
         await page.getByRole('link', { name: title, exact: true }).click();
         await expect(page).toHaveURL(`${baseURL}${route}`);
         await expect(page).toHaveTitle(`${title} | Don Le`);

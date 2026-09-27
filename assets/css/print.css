@@ -13,7 +13,7 @@
   .prose, .project-content, .intro-text { max-inline-size: 100%; }
   h1, h2, h3, h4, figcaption { break-after: avoid; }
   p, li { orphans: 3; widows: 3; }
-  .text-flow, .project-row { break-inside: avoid; }
+  .text-flow, .project-media, .project-row { break-inside: avoid; }
   a, a:visited { color: var(--color-text); }
   a[href^="https://"]::after, a[href^="mailto:"]::after { content: " (" attr(href) ")"; }
   a[href^="/"]::after { content: " (https://www.donske.com.au" attr(href) ")"; }

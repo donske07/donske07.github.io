@@ -9,6 +9,7 @@ const manifest = path.resolve(process.env.MANIFEST_FILE ?? path.join(root, 'scri
 const origin = 'https://www.donske.com.au';
 const routes = new Map([
   ['index.html', ['/', 'Don Le | Staff Engineer · Data Platforms & Applied AI', 'Don Le, Staff Engineer at mod.io, showcasing open-source agent tooling and independent work in local retrieval, assistant execution and recommendation ranking.']],
+  ['projects/agent-workforce/index.html', ['/projects/agent-workforce/', 'Agent Workforce | Don Le', 'An open-source Go CLI that coordinates specialist coding agents through generated MCP tools, managed lifecycles and an optional Pixel Office view.']],
   ['projects/local-rag/index.html', ['/projects/local-rag/', 'Local-first RAG for coding agents | Don Le', 'A developer-tooling prototype using local embeddings, chunked sources and a vector index to retrieve project context for coding agents.']],
   ['projects/personal-assistant/index.html', ['/projects/personal-assistant/', 'Personal AI assistant | Don Le', 'An in-development assistant exploring reliable conversation execution through idempotent replay, persistent state, bounded context, stream validation and budget controls.']],
   ['projects/recommender/index.html', ['/projects/recommender/', 'Two-stage recommendation engine | Don Le', 'A two-stage MovieLens recommendation prototype: semantic candidate retrieval, feature-based reranking, score fusion, unknown-user fallback and evaluation design.']],
@@ -16,7 +17,8 @@ const routes = new Map([
 ]);
 // Independent of the editable manifest: expanding it must not authorize publication.
 const publicFiles = [...routes.keys(), '404.html', 'assets/css/tokens.css', 'assets/css/site.css',
-  'assets/css/print.css', 'assets/favicon.svg', 'assets/social-card.svg', 'covers/herophoto.png',
+  'assets/css/print.css', 'assets/img/agent-workforce-office.png', 'assets/img/agent-workforce-terminal.png',
+  'assets/favicon.svg', 'assets/social-card.svg', 'covers/herophoto.png',
   'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml'].sort();
 
 function same(actual, expected, label) {
@@ -115,7 +117,7 @@ async function main() {
     `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml`, 'Invalid robots sitemap pointer');
   same(await readFile(path.join(dist, 'CNAME'), 'utf8'), 'www.donske.com.au\n', 'CNAME bytes');
   same((await readFile(path.join(dist, '.nojekyll'))).length, 0, '.nojekyll');
-  console.log(`Checked ${files.length} artifact files, five metadata routes, sitemap and local HTML references`);
+  console.log(`Checked ${files.length} artifact files, six metadata routes, sitemap and local HTML references`);
 }
 
 main().catch(error => { console.error(error); process.exitCode = 1; });

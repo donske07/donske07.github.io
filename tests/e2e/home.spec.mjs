@@ -6,9 +6,9 @@ const fixtureMode = process.env.HOME_SOURCE_QA === '1';
 const evidence = process.env.EVIDENCE_DIR || '.omo/evidence/recruiter-ai-portfolio';
 const require = createRequire(import.meta.url);
 const tabKey = browserName => process.platform === 'darwin' && browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
-const titles = ['Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommendation engine'];
-const headings = ['Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommender'];
-const routes = ['/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/'];
+const titles = ['Agent Workforce', 'Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommendation engine'];
+const headings = ['Agent Workforce', 'Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommender'];
+const routes = ['/projects/agent-workforce/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/'];
 const role = 'Staff Engineer / Tech Lead — Data Platform at mod.io';
 const save = (name, data) => writeFile(`${evidence}/task-6-${name}.json`, JSON.stringify(data, null, 2));
 const capture = (page, name) => page.screenshot({ path: `${evidence}/task-6-${name}.png`, fullPage: true });
@@ -36,10 +36,10 @@ async function identity(page) {
   await expect(page.locator('.intro .current-role')).toHaveText(role);
   await expect(page.locator('#experience')).toContainText(role);
   await expect(page.locator('.project-list > li')).toHaveCount(4);
-  await expect(page.locator('.project-list h3')).toHaveText(['Agent Workforce', ...titles]);
+  await expect(page.locator('.project-list h3')).toHaveText(titles);
   await expect(page.locator('.project-list .status')).toHaveText(['Open-source Go tooling', 'Developer-tooling prototype', 'Local prototype · In development', 'ML prototype']);
-  const workforce = page.getByRole('link', { name: 'Explore repository Agent Workforce', exact: true });
-  await expect(workforce).toHaveAttribute('href', 'https://github.com/donske07/agent-workforce');
+  const workforce = page.getByRole('link', { name: 'Read project Agent Workforce', exact: true });
+  await expect(workforce).toHaveAttribute('href', '/projects/agent-workforce/');
   await expect(workforce).not.toHaveAttribute('target');
   for (const [index, route] of routes.entries()) {
     await expect(page.getByRole('link', { name: `Read project ${titles[index]}`, exact: true })).toHaveAttribute('href', route);
@@ -83,8 +83,8 @@ async function agentWorkforce(page) {
     await expect(row).toContainText(phrase);
   }
   await expect(row.locator('.status')).toHaveText('Open-source Go tooling');
-  await expect(row.getByRole('link', { name: 'Explore repository Agent Workforce', exact: true })).toHaveAttribute(
-    'href', 'https://github.com/donske07/agent-workforce');
+  await expect(row.getByRole('link', { name: 'Read project Agent Workforce', exact: true })).toHaveAttribute(
+    'href', '/projects/agent-workforce/');
   await expect(page.locator('#supporting-work')).toHaveCount(0);
   await expect(page.locator('#experience > h2')).toHaveText('Professional experience');
   await expect(page.locator('#experience > p').first()).toHaveText(role);
@@ -93,7 +93,7 @@ async function agentWorkforce(page) {
     'My professional focus is data-platform engineering. The selected engineering projects are independent work outside this role.');
 }
 
-test('agent workforce is the first selected project with a public repository', async ({ page }) => {
+test('agent workforce is the first selected project with a local case study', async ({ page }) => {
   await load(page);
   await agentWorkforce(page);
 });

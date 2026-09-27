@@ -4,7 +4,7 @@ import path from 'node:path';
 import { load } from 'cheerio';
 
 const origin = 'https://www.donske.com.au';
-const routes = ['/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/'];
+const routes = ['/', '/projects/agent-workforce/', '/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/', '/cv/'];
 const evidence = process.env.EVIDENCE_DIR ?? '.omo/evidence/recruiter-ai-portfolio';
 
 async function enumerate(dir, prefix = '') {
@@ -47,8 +47,8 @@ test('actual artifact metadata DOM, sitemap, public files and HTTP statuses', as
     expect(meta.ogImage).toEqual([]);
     results.push({ route, status: response.status(), ...meta });
   }
-  expect(new Set(results.map(row => row.title)).size).toBe(5);
-  expect(new Set(results.map(row => row.description[0])).size).toBe(5);
+  expect(new Set(results.map(row => row.title)).size).toBe(6);
+  expect(new Set(results.map(row => row.description[0])).size).toBe(6);
   const sitemap = await request.get('/sitemap.xml');
   expect(sitemap.status()).toBe(200);
   const $ = load(await sitemap.text(), { xmlMode: true });
@@ -66,7 +66,7 @@ test('actual artifact metadata DOM, sitemap, public files and HTTP statuses', as
   const manifest = JSON.parse(await readFile('scripts/publish-files.json', 'utf8'));
   const files = await enumerate('dist');
   expect(files).toEqual([...manifest].sort());
-  expect(files).toHaveLength(16);
+  expect(files).toHaveLength(19);
   await writeFile(`${evidence}/task-12-metadata.json`, JSON.stringify({ routes: results, sitemap: routes.map(route => `${origin}${route}`), robotsStatus: robots.status(), missingStatus: missing.status(), errorMeta }, null, 2));
   await writeFile(`${evidence}/task-12-public-files.json`, JSON.stringify({ files, count: files.length }, null, 2));
 });

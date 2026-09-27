@@ -34,7 +34,7 @@ async function fixture(t) {
   return { dist, manifest, run };
 }
 
-test('exact public artifact and five metadata routes pass', async t => {
+test('exact public artifact and six metadata routes pass', async t => {
   const { run } = await fixture(t);
   assert.equal(run().status, 0, run().stderr);
 });
