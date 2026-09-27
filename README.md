@@ -5,7 +5,7 @@ This repository contains editable HTML and shared CSS for a static portfolio. Th
 ## Source layout
 
 - `index.html`: introduction, current role and four selected projects.
-- `projects/{agent-workforce,local-rag,personal-assistant,recommender}/index.html`: four project stories, in homepage display order; Agent Workforce includes its public source link.
+- `projects/{agent-workforce,local-rag,personal-assistant,recommender}/index.html`: four project stories, in homepage display order; Agent Workforce and Local-first RAG include public source links.
 - `cv/index.html`: printable HTML profile, not a PDF download. Use your browser's Print command to save a copy.
 - `404.html`: custom error document for retired and unknown routes, not an indexable page.
 - `assets/css/{tokens,site,print}.css`: shared design tokens, layout and print rules. See `DESIGN.md` before changing presentation.
@@ -55,7 +55,7 @@ Keep detailed reports, screenshots and traces under private `EVIDENCE_DIR`. Don'
 
 Keep portfolio positioning separate from the supplied current employer title. Only supported title/company and high-level data-platform claims belong in employer copy. Don't add chronology, personal impact numbers, adoption, production outcomes, private repository names, internal architecture or unsupported credentials.
 
-Project descriptions are bounded descriptions. The personal assistant is not production-ready; don't imply enabled retrieval, tools, uploads, cloud acceptance or verified billing. Local embeddings don't establish end-to-end privacy for RAG. The recommender's evaluation methodology isn't an achieved score, and optional MMR isn't established as part of serving. Agent Workforce has a local case study with the supplied public repository `https://github.com/donske07/agent-workforce`; don't imply adoption, production usage or impact metrics, and don't invent source/demo links for the other projects. Existing email and GitHub contacts are inherited, not newly verified.
+Project descriptions are bounded descriptions. The personal assistant is not production-ready; don't imply enabled retrieval, tools, uploads, cloud acceptance or verified billing. Local embeddings don't establish end-to-end privacy for RAG. The recommender's evaluation methodology isn't an achieved score, and optional MMR isn't established as part of serving. Agent Workforce and Local-first RAG have supplied public repositories at `https://github.com/donske07/agent-workforce` and `https://github.com/donske07/opencode-rag-plugin`; don't imply adoption, production usage or impact metrics, and don't invent source/demo links for the other projects. Existing email and GitHub contacts are inherited, not newly verified.
 
 Preserve `covers/herophoto.png` byte-for-byte: 246x263 pixels, 102066 bytes, SHA-256 `5f476b810f513cd73089ee7aaf5439791de1b0ca918ee2b591ad8e82804cf8b7`. Keep alt text `Portrait of Don Le`, natural aspect ratio, 112px mobile/160px desktop display widths and no enlargement beyond intrinsic width. No crop, conversion, retouch or generated replacement.
 
