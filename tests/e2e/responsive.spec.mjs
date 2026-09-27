@@ -60,7 +60,7 @@ for (const route of routes) {
     }).length)).toBe(0);
     const axe = await new AxeBuilder({ page }).analyze();
     expect(axe.violations).toEqual([]);
-    await page.screenshot({ path: info.outputPath('enlarged-reduced-motion.png'), fullPage: true });
+    await page.screenshot({ path: info.outputPath('enlarged-reduced-motion.png'), fullPage: true, scale: 'css' });
     await info.attach('enlargement', { body: JSON.stringify({ measured, violations: axe.violations, rootFont: '32px', cssViewport: 320 }), contentType: 'application/json' });
   });
 }
