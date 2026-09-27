@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Personal AI assistant | Don Le</title>
-  <meta name="description" content="An in-development local assistant prototype exploring streamed responses, bounded context, persistent execution state and cost controls; not production-ready.">
+  <meta name="description" content="An in-development assistant exploring reliable conversation execution through idempotent replay, persistent state, bounded context, stream validation and budget controls.">
   <link rel="canonical" href="https://www.donske.com.au/projects/personal-assistant/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Personal AI assistant | Don Le">
-  <meta property="og:description" content="An in-development local assistant prototype exploring streamed responses, bounded context, persistent execution state and cost controls; not production-ready.">
+  <meta property="og:description" content="An in-development assistant exploring reliable conversation execution through idempotent replay, persistent state, bounded context, stream validation and budget controls.">
   <meta property="og:url" content="https://www.donske.com.au/projects/personal-assistant/">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/tokens.css">
@@ -33,24 +33,24 @@
       <div class="intro-text stack">
         <h1 id="story-title">Personal AI assistant</h1>
         <p class="status">Local prototype · In development</p>
-        <p>A local assistant prototype exploring streamed model responses, bounded context, persistent execution state and cost controls.</p>
-        <p><strong>This project is not production-ready.</strong></p>
-        <p>Not production-ready; cloud deployment and live billing remain unverified.</p>
+        <p>This project explores reliable conversation execution: preserving state across retries and interruptions, keeping context bounded, validating streamed responses and checking budgets before generation.</p>
+        <p>The engineering focus is the execution lifecycle around the model. Idempotent replay gives repeat requests a stored result, while explicit interruption handling avoids silently starting another generation.</p>
       </div>
     </section>
     <section class="prose" aria-labelledby="problem-title">
-      <h2 id="problem-title">Problem</h2>
-      <p>The prototype explores what happens around a model response: choosing bounded context, preserving execution state and deciding how interruptions should affect a conversation.</p>
-      <p>Its focus is a local, single-owner assistant rather than a deployed service with verified production access and billing.</p>
+      <h2 id="problem-title">A conversation is more than a model call</h2>
+      <p>A chat interface has to handle more than a successful answer. A client can retry a request, disconnect during a stream or return after the process restarts. Conversation history also grows beyond what belongs in a single prompt.</p>
+      <p>The design treats each generation as a persistent execution with its own identity and outcome, rather than tying its lifecycle to an open connection.</p>
     </section>
     <section class="prose" aria-labelledby="approach-title">
-      <h2 id="approach-title">Implemented approach</h2>
-      <p>A submitted turn is checked against an enabled model profile, assembled context and budget admission before a fresh execution starts. Reusing a request identifier with the same content and profile replays the existing execution; changing either produces a conflict instead of silently starting another generation.</p>
-      <p>The documented execution contract persists output snapshots before delivery and keeps terminal outcomes for subsequent reads. The streaming path requests incremental model output and checks the response format, completion marker and output bounds before reporting completion.</p>
-      <p>Context selection retains recent turns and can create a deterministic extractive summary of older material, explicitly marked as lossy conversation data rather than policy. The assembled prompt must fit the configured character bound; an oversized latest turn is rejected rather than silently shortened.</p>
+      <h2 id="approach-title">Execution, context and streaming decisions</h2>
+      <p>Each new turn is checked against an enabled model profile, assembled context and budget admission before generation starts. Reusing a request identifier with the same content and profile replays the existing execution. Changing either returns a conflict, so a retry can't silently become a different request.</p>
+      <p>The persistence contract stores output snapshots before delivery and retains terminal outcomes for later reads. Disconnecting leaves generation running; an explicit Stop persists the stopped state and requests upstream cancellation.</p>
+      <p>The streaming path checks the response format, completion marker and output bounds before reporting completion. Receiving text alone isn't enough to mark an execution successful.</p>
+      <p>Context selection keeps recent turns and uses deterministic extraction to summarize older material. The summary is marked as lossy conversation data, never policy. The entire assembled prompt must fit the configured character bound; an oversized latest turn is rejected rather than silently shortened.</p>
     </section>
     <section class="prose" aria-labelledby="architecture-title">
-      <h2 id="architecture-title">Architecture in words</h2>
+      <h2 id="architecture-title">From request to stored outcome</h2>
       <figure class="text-flow" aria-labelledby="flow-caption">
         <figcaption id="flow-caption">Simplified conceptual overview</figcaption>
         <ol>
@@ -61,27 +61,25 @@
           <li>Execution state</li>
         </ol>
       </figure>
-      <p>This is a simplified conceptual overview, not a guarantee of exact internal call ordering.</p>
-      <p>User turn → bounded context → budget admission → persistent execution → streamed output → stored outcome and replay.</p>
+      <p>These stages show the main responsibilities. Persistent execution state connects admission, output delivery and later replay, so delivery isn't the only record of what happened.</p>
+      <p>A fresh request goes through context and budget checks. A repeat request reads the existing execution instead of repeating admission or inference.</p>
     </section>
     <section class="prose" id="trade-offs" aria-labelledby="trade-offs-title">
       <h2 id="trade-offs-title">Trade-offs</h2>
       <h3>Bounded context and lost detail</h3>
-      <p>Summarizing older turns leaves room for recent context, but extracted fragments can omit details that remain in the stored raw conversation. This keeps context construction bounded without claiming that the summary preserves every fact or matches a model-generated summary.</p>
+      <p>Extracting older turns leaves room for recent context without another model call, but fragments can miss details or relationships. The raw conversation remains stored; the prompt contains only a bounded view of it. A character limit makes prompt size explicit, but it isn't an exact token count.</p>
       <h3>Conservative interruption handling</h3>
-      <p>Conservative interruption handling avoids automatically rerunning a generation after restart, at the cost of leaving some interrupted work or usage reservations unresolved. That is not an exactly-once provider guarantee, and requesting Stop doesn't guarantee that remote billing stops.</p>
+      <p>After a restart, running executions are marked interrupted rather than automatically rerun. This favors avoiding duplicate generation over automatic recovery: even unstarted work can become interrupted, and a usage reservation can remain held. Starting a new generation requires an explicit new request identifier.</p>
     </section>
     <section class="prose" aria-labelledby="limits-title">
-      <h2 id="limits-title">Limits and current status</h2>
-      <p>The assistant is not production-ready: production identity and access configuration, approved models and prices, remote acceptance and live billing remain unverified.</p>
-      <p>Retrieval providers, tools and uploads are not enabled in the documented chat contract.</p>
-      <p>Development tests are documented, including a test-only provider, but their existence isn't a claim that they passed in this review or validate a live model service.</p>
-      <p>Configured limits and cost controls describe intended execution boundaries, not observed savings, latency or a verified cloud deployment.</p>
+      <h2 id="limits-title">Project scope</h2>
+      <p>This is a local, single-owner assistant in development, not a deployed service. The current chat contract keeps retrieval providers, tools and uploads disabled so the work stays focused on conversation execution.</p>
+      <p>Development testing uses local storage and runtime components with a test-only provider to exercise the execution lifecycle.</p>
     </section>
   </main>
   <footer class="site-footer page-container stack">
     <h2>About and contact</h2>
-    <p>This portfolio separates current data-platform work from prototype explorations in applied AI.</p>
+    <p>Explore the other applied-AI projects or get in touch to discuss the engineering decisions.</p>
     <div class="link-cluster">
       <a href="mailto:don.le@donske.com.au">Email: don.le@donske.com.au</a>
       <a href="https://github.com/donske07">GitHub</a>

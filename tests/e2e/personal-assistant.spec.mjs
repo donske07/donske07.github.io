@@ -44,23 +44,28 @@ async function load(page) {
   }
 }
 
-test('readiness and complete conceptual story', async ({ page }) => {
+test('execution contributions and scoped conceptual story', async ({ page }) => {
   await load(page);
-  await expect(page.getByText('This project is not production-ready.', { exact: true })).toBeVisible();
+  await expect(page.locator('.intro')).toContainText('Idempotent replay');
   await expect(page.locator('h1')).toHaveText('Personal AI assistant');
   await expect(page.locator('.status').first()).toHaveText('Local prototype · In development');
-  for (const heading of ['Problem', 'Implemented approach', 'Architecture in words', 'Trade-offs', 'Limits and current status']) {
+  for (const heading of ['A conversation is more than a model call', 'Execution, context and streaming decisions', 'From request to stored outcome', 'Trade-offs', 'Project scope']) {
     await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible();
   }
   await expect(page.locator('.text-flow li')).toHaveText(stages);
-  await expect(page.getByText(/not a guarantee of exact internal call ordering/)).toBeVisible();
+  await expect(page.getByRole('figure', { name: 'Simplified conceptual overview' })).toBeVisible();
   await expect(page.locator('#trade-offs h3')).toHaveCount(2);
   await expect(page.locator('script, form, input, iframe, button')).toHaveCount(0);
   const content = await page.locator('body').innerText();
   expect(content).not.toMatch(/\/Users\/|\[A\d\d\]|api[_-]?key|production-ready assistant/i);
   expect(content.replace(/not production-ready/gi, '')).not.toMatch(/production-ready/i);
-  await expect(page.getByText('Retrieval providers, tools and uploads are not enabled in the documented chat contract.', { exact: true })).toBeVisible();
-  await expect(page.getByText(/their existence isn't a claim that they passed/)).toBeVisible();
+  for (const phrase of ['budget admission before generation', 'same content and profile replays', 'Changing either returns a conflict',
+    'stores output snapshots before delivery', 'Disconnecting leaves generation running', 'requests upstream cancellation',
+    'response format, completion marker and output bounds', 'deterministic extraction', 'lossy conversation data, never policy',
+    'oversized latest turn is rejected', 'marked interrupted rather than automatically rerun', 'usage reservation can remain held',
+    'local, single-owner assistant in development, not a deployed service', 'retrieval providers, tools and uploads disabled', 'test-only provider']) {
+    expect(content).toContain(phrase);
+  }
 });
 
 for (const width of [320, 375, 768, 1280]) {
@@ -116,7 +121,8 @@ test('no JavaScript at 320px retains the entire story', async ({ browser, browse
     const page = await context.newPage();
     await load(page);
     await expect(page.locator('.text-flow li')).toHaveText(stages);
-    await expect(page.getByText('This project is not production-ready.', { exact: true })).toBeVisible();
+    await expect(page.locator('.status')).toHaveText('Local prototype · In development');
+    await expect(page.locator('[aria-labelledby="limits-title"]')).toContainText('not a deployed service');
     const content = await page.locator('main').innerText();
     const source = parseHtml(await readFile('projects/personal-assistant/index.html', 'utf8'));
     const normalize = text => text.replace(/\s+/g, ' ').trim();
@@ -142,7 +148,7 @@ test('untrusted text, stale state, interrupted styles and misleading claims', as
   expect(await page.locator('main').innerText()).toBe(original);
   const hasPositiveReadiness = text => /production-ready/i.test(text.replace(/not production-ready/gi, ''));
   expect(hasPositiveReadiness(original)).toBe(false);
-  expect(hasPositiveReadiness(original.replace('This project is not production-ready.', 'This project is production-ready.'))).toBe(true);
+  expect(hasPositiveReadiness(`${original}\nThis project is production-ready.`)).toBe(true);
   if (mode === 'production') {
     await context.route('**/assets/**', intercepted => intercepted.abort());
     await page.reload();
