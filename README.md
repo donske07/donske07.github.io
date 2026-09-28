@@ -1,12 +1,12 @@
 # Don Le's portfolio
 
-This repository contains editable HTML and shared CSS for a static portfolio. There is no frontend runtime, CMS or live AI demo. Native links and browser Print work without JavaScript. Development dependencies package and test the site; they aren't shipped to visitors.
+This repository contains editable HTML and shared CSS for a static portfolio. There is no frontend runtime, CMS or live AI demo. Native links, the supplied DOCX CV download and browser Print work without JavaScript. Development dependencies package and test the site; they aren't shipped to visitors.
 
 ## Source layout
 
 - `index.html`: introduction, current role and four selected projects.
 - `projects/{agent-workforce,local-rag,personal-assistant,recommender}/index.html`: four project stories, in homepage display order; Agent Workforce and Local-first RAG include public source links.
-- `cv/index.html`: printable HTML profile, not a PDF download. Use your browser's Print command to save a copy.
+- `cv/index.html` and `cv/Don_Le_CV.docx`: printable HTML profile plus the supplied Word-document download. Use your browser's Print command when a PDF copy is preferred.
 - `404.html`: custom error document for retired and unknown routes, not an indexable page.
 - `assets/css/{tokens,site,print}.css`: shared design tokens, layout and print rules. See `DESIGN.md` before changing presentation.
 - `assets/img/agent-workforce-{office,terminal}.png`: source Office screenshot and command-menu capture used by the Agent Workforce story.
@@ -59,11 +59,13 @@ Project descriptions are bounded descriptions. The personal assistant is not pro
 
 Preserve `covers/herophoto.png` byte-for-byte: 246x263 pixels, 102066 bytes, SHA-256 `5f476b810f513cd73089ee7aaf5439791de1b0ca918ee2b591ad8e82804cf8b7`. Keep alt text `Portrait of Don Le`, natural aspect ratio, 112px mobile/160px desktop display widths and no enlargement beyond intrinsic width. No crop, conversion, retouch or generated replacement.
 
+Preserve `cv/Don_Le_CV.docx` byte-for-byte: 41624 bytes, SHA-256 `02e52ed59b822d2137cad8f22bff06a0c43e746d13872e92c7caf4b28fbce0c9`. The profile route exposes it as `Download CV (.docx)` while retaining browser Print as the PDF path.
+
 Keep `CNAME` exactly `www.donske.com.au` followed by one newline. Canonical origin is `https://www.donske.com.au`. Maintain six indexable routes: `/`, `/projects/agent-workforce/`, `/projects/local-rag/`, `/projects/personal-assistant/`, `/projects/recommender/`, `/cv/`. Retired blog/tag/article paths must remain real 404s, not home redirects. The error document stays noindex with no canonical.
 
 ## Allowlisted build and CI
 
-`scripts/publish-files.json` enumerates exactly 19 files. Build cleans `dist/` and copies only those approved files, including the unchanged portrait/CNAME and empty `.nojekyll`. The site checker independently enforces the expected public boundary, links and metadata. If an authorized change needs another public file, review its contents and update the manifest, independent checker expectations and related tests together. Never replace the allowlist with a recursive repository upload.
+`scripts/publish-files.json` enumerates exactly 20 files. Build cleans `dist/` and copies only those approved files, including the unchanged portrait, CV document, CNAME and empty `.nojekyll`. The site checker independently enforces the expected public boundary, links, CV bytes and metadata. If an authorized change needs another public file, review its contents and update the manifest, independent checker expectations and related tests together. Never replace the allowlist with a recursive repository upload.
 
 `.github/workflows/portfolio-check.yml` runs on pull requests and manual dispatch. It uses `contents: read`, doesn't persist checkout credentials, installs locked dependencies and browsers, requires Chrome stable, then runs `npm run verify`. Only successful verification reaches `actions/upload-artifact`, which uploads `dist/` as an ordinary review artifact. Artifacts expire after 14 days and aren't a deployment or permanent rollback archive.
 
