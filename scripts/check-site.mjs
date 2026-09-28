@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { lstat, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -18,7 +19,7 @@ const routes = new Map([
 // Independent of the editable manifest: expanding it must not authorize publication.
 const publicFiles = [...routes.keys(), '404.html', 'assets/css/tokens.css', 'assets/css/site.css',
   'assets/css/print.css', 'assets/img/agent-workforce-office.png', 'assets/img/agent-workforce-terminal.png',
-  'assets/favicon.svg', 'assets/social-card.svg', 'covers/herophoto.png',
+  'assets/favicon.svg', 'assets/social-card.svg', 'covers/herophoto.png', 'cv/Don_Le_CV.docx',
   'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml'].sort();
 
 function same(actual, expected, label) {
@@ -117,7 +118,11 @@ async function main() {
     `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml`, 'Invalid robots sitemap pointer');
   same(await readFile(path.join(dist, 'CNAME'), 'utf8'), 'www.donske.com.au\n', 'CNAME bytes');
   same((await readFile(path.join(dist, '.nojekyll'))).length, 0, '.nojekyll');
-  console.log(`Checked ${files.length} artifact files, six metadata routes, sitemap and local HTML references`);
+  const cv = await readFile(path.join(dist, 'cv/Don_Le_CV.docx'));
+  if (cv.length !== 41624 || createHash('sha256').update(cv).digest('hex') !== '02e52ed59b822d2137cad8f22bff06a0c43e746d13872e92c7caf4b28fbce0c9') {
+    throw new Error('CV document bytes changed');
+  }
+  console.log(`Checked ${files.length} artifact files, six metadata routes, sitemap, CV download and local HTML references`);
 }
 
 main().catch(error => { console.error(error); process.exitCode = 1; });
