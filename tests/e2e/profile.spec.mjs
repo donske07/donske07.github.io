@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { test, expect } from '@playwright/test';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -9,6 +10,8 @@ const role = 'Staff Engineer / Tech Lead — Data Platform at mod.io';
 const titles = ['Local-first RAG for coding agents', 'Personal AI assistant', 'Two-stage recommendation engine'];
 const routes = ['/projects/local-rag/', '/projects/personal-assistant/', '/projects/recommender/'];
 const statuses = ['Developer-tooling prototype', 'Local prototype · In development', 'ML prototype'];
+const cvHref = '/cv/Don_Le_CV.docx';
+const cvSha256 = '02e52ed59b822d2137cad8f22bff06a0c43e746d13872e92c7caf4b28fbce0c9';
 const capture = (page, name) => page.screenshot({ path: `${E}/task-10-${name}.png`, fullPage: true });
 
 async function load(page, styled = true) {
@@ -43,8 +46,11 @@ async function supported(page) {
   for (let i = 0; i < titles.length; i++) await expect(page.getByRole('link', { name: titles[i], exact: true })).toHaveAttribute('href', routes[i]);
   await expect(page.locator('a[href="mailto:don.le@donske.com.au"]')).toBeVisible();
   await expect(page.locator('a[href="https://github.com/donske07"]')).toBeVisible();
+  const download = page.getByRole('link', { name: 'Download CV (.docx)', exact: true });
+  await expect(download).toHaveAttribute('href', cvHref);
+  await expect(download).toHaveAttribute('download', '');
   await expect(page.getByText("Use your browser's Print command to save a copy.", { exact: true })).toBeVisible();
-  await expect(page.locator('a[download], a[href$=".pdf"], button, script, time')).toHaveCount(0);
+  await expect(page.locator('a[href$=".pdf"], button, script, time')).toHaveCount(0);
   expect(await page.locator('main').innerText()).not.toMatch(/\b(?:19|20)\d{2}\b|education|university|years of|Agent workforce/i);
 }
 
@@ -68,6 +74,9 @@ test('supported profile is native HTML with approved content and no fabricated h
   await load(page, false);
   await supported(page);
   const source = await readFile('cv/index.html', 'utf8');
+  const document = await readFile('cv/Don_Le_CV.docx');
+  expect(document.length).toBe(41624);
+  expect(createHash('sha256').update(document).digest('hex')).toBe(cvSha256);
   expect(source).not.toMatch(/<script|\[(?:I|H|C)\d{2}\]|\/Users\//);
   await capture(page, 'unstyled');
 });
@@ -152,7 +161,7 @@ test('print media retains substantive content and URLs; Chromium exports A4 and 
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('.site-nav')).toBeHidden();
   expect(await page.locator('main').innerText()).toBe(before);
-  for (const href of ['mailto:don.le@donske.com.au', 'https://github.com/donske07', ...routes]) {
+  for (const href of ['mailto:don.le@donske.com.au', 'https://github.com/donske07', cvHref, ...routes]) {
     expect(await page.locator(`a[href="${href}"]`).evaluate(link => getComputedStyle(link, '::after').content)).toContain(href);
   }
   info.annotations.push({ type: 'print-coverage', description: 'All engines validate print media/content/URLs; Playwright PDF serialization supports Chromium only.' });
