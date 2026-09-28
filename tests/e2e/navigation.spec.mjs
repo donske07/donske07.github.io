@@ -14,11 +14,15 @@ for (const route of routes) test(`every internal anchor reaches a real destinati
   const destination = await context.newPage();
   try {
     expect((await page.goto(route)).status()).toBe(200);
-    const hrefs = await page.locator('a').evaluateAll(links => links.map(link => link.href));
-    for (const href of new Set(hrefs)) {
+    const destinations = await page.locator('a').evaluateAll(links => [...new Map(links.map(link => [link.href, {
+      href: link.href,
+      download: link.hasAttribute('download'),
+    }])).values()]);
+    for (const { href, download } of destinations) {
       const url = new URL(href);
       if (url.origin !== new URL(baseURL).origin) continue;
       expect((await page.request.get(href, { maxRedirects: 0 })).status(), `${route} -> ${href}`).toBe(200);
+      if (download) continue;
       await destination.goto(href);
       if (url.pathname !== '/404.html') await expect(destination.locator('h1')).not.toHaveText('Page unavailable');
       if (url.hash) await expect(destination.locator(`[id="${decodeURIComponent(url.hash.slice(1))}"]`)).toBeVisible();

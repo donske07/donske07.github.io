@@ -66,7 +66,7 @@ test('actual artifact metadata DOM, sitemap, public files and HTTP statuses', as
   const manifest = JSON.parse(await readFile('scripts/publish-files.json', 'utf8'));
   const files = await enumerate('dist');
   expect(files).toEqual([...manifest].sort());
-  expect(files).toHaveLength(19);
+  expect(files).toHaveLength(20);
   await writeFile(`${evidence}/task-12-metadata.json`, JSON.stringify({ routes: results, sitemap: routes.map(route => `${origin}${route}`), robotsStatus: robots.status(), missingStatus: missing.status(), errorMeta }, null, 2));
   await writeFile(`${evidence}/task-12-public-files.json`, JSON.stringify({ files, count: files.length }, null, 2));
 });
