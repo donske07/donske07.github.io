@@ -95,7 +95,7 @@ test('native navigation and no AI, model or analytics network calls', async ({ p
     return url.origin === baseURL ? intercepted.continue() : intercepted.abort();
   });
   await load(page);
-  const links = [['Don Le', '/'], ['Work', '/#work'], ['Experience', '/#experience'], ['Profile', '/cv/'], ['Contact', '/#contact']];
+  const links = [['Don Le', '/'], ['Work', '/#work'], ['Experience', '/#experience'], ['CV', '/cv/'], ['Contact', '/#contact']];
   for (const [name, href] of links) {
     const link = page.locator('header').getByRole('link', { name, exact: true });
     await expect(link).toHaveAttribute('href', href);

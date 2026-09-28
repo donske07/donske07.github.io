@@ -70,7 +70,7 @@ for (const javaScriptEnabled of [true, false]) {
         await page.getByRole('navigation').getByRole('link', { name: 'Work', exact: true }).click();
         await expect(page).toHaveURL(`${baseURL}/#work`);
       }
-      await page.getByRole('navigation').getByRole('link', { name: 'Profile', exact: true }).click();
+      await page.getByRole('navigation').getByRole('link', { name: 'CV', exact: true }).click();
       await expect(page.getByText("Use your browser's Print command to save a copy.", { exact: true })).toBeVisible();
       for (const { title, heading, route } of projects.filter(project => project.profile)) {
         await page.getByRole('link', { name: title, exact: true }).click();

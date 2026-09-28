@@ -27,7 +27,7 @@ test('RAG story has server text, qualified claims and native destinations', asyn
   }
   await expect(page.getByRole('figure', { name: 'Implementation overview' }).locator('ol > li')).toHaveText(stages);
   const nav = page.getByRole('navigation', { name: 'Primary' });
-  for (const [name, href] of [['Work', '/#work'], ['Experience', '/#experience'], ['Profile', '/cv/'], ['Contact', '/#contact']]) {
+  for (const [name, href] of [['Work', '/#work'], ['Experience', '/#experience'], ['CV', '/cv/'], ['Contact', '/#contact']]) {
     await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href);
     if (!sourceOnly) {
       const destination = await page.request.get(href);

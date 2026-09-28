@@ -56,7 +56,7 @@ async function identity(page) {
   await expect(page.locator('.intro')).toContainText('Outside work, I build tools for agent coordination');
   await agentWorkforce(page);
   await expect(page.locator('#experience a')).toHaveCount(0);
-  await expect(page.locator('.site-nav a')).toHaveText(['Work', 'Experience', 'Profile', 'Contact']);
+  await expect(page.locator('.site-nav a')).toHaveText(['Work', 'Experience', 'CV', 'Contact']);
   await expect(page.locator('.site-nav a')).toHaveCount(4);
   const hrefs = await page.locator('.site-nav a').evaluateAll(links => links.map(link => link.getAttribute('href')));
   expect(hrefs).toEqual(['#work', '#experience', '/cv/', '#contact']);
